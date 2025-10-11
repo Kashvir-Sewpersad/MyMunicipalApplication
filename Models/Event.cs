@@ -10,21 +10,21 @@ namespace Programming_7312_Part_1.Models
         public int Id { get; set; }
 
         [Required]
-        public string Title { get; set; }
+        public string? Title { get; set; }
 
         [Required]
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
         [Required]
-        public string Category { get; set; }
+        public string? Category { get; set; }
 
         [Required]
         public DateTime EventDate { get; set; }
 
         [Required]
-        public string Location { get; set; }
+        public string? Location { get; set; }
 
-        public string ImagePath { get; set; }
+        public string? ImagePath { get; set; }
 
         public DateTime CreatedDate { get; set; } = DateTime.Now;
 

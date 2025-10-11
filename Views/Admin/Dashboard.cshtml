@@ -48,6 +48,7 @@
                     <th>Category</th>
                     <th>Date</th>
                     <th>Location</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -58,6 +59,9 @@
                         <td>@eventItem.Category</td>
                         <td>@eventItem.EventDate.ToString("yyyy-MM-dd")</td>
                         <td>@eventItem.Location</td>
+                        <td>
+                            <a href="@Url.Action("EditEvent", "Admin", new { id = eventItem.Id })" class="btn btn-sm btn-outline-primary">Edit</a>
+                        </td>
                     </tr>
                 }
             </tbody>

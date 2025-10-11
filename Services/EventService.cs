@@ -224,6 +224,86 @@ namespace Programming_7312_Part_1.Services
                 .ToList();
         }
 
+        public bool UpdateEvent(Event updatedEvent)
+        {
+            var existingEvent = _allEvents.FirstOrDefault(e => e.Id == updatedEvent.Id);
+            if (existingEvent == null)
+            {
+                return false;
+            }
+
+            // Store old values for cleanup
+            var oldDateKey = existingEvent.EventDate.Date;
+            var oldCategory = existingEvent.Category;
+
+            // Update properties
+            existingEvent.Title = updatedEvent.Title;
+            existingEvent.Description = updatedEvent.Description;
+            existingEvent.Category = updatedEvent.Category;
+            existingEvent.EventDate = updatedEvent.EventDate;
+            existingEvent.Location = updatedEvent.Location;
+            existingEvent.ImagePath = updatedEvent.ImagePath;
+            existingEvent.Tags = updatedEvent.Tags ?? new List<string>();
+
+            // If category changed, update EventsByCategory
+            if (oldCategory != updatedEvent.Category)
+            {
+                // Remove from old category
+                if (EventsByCategory.ContainsKey(oldCategory))
+                {
+                    EventsByCategory[oldCategory].Remove(existingEvent);
+                    if (EventsByCategory[oldCategory].Count == 0)
+                    {
+                        EventsByCategory.Remove(oldCategory);
+                    }
+                }
+
+                // Add to new category
+                if (!EventsByCategory.ContainsKey(updatedEvent.Category))
+                {
+                    EventsByCategory[updatedEvent.Category] = new List<Event>();
+                }
+                EventsByCategory[updatedEvent.Category].Add(existingEvent);
+
+                // Update UniqueCategories
+                UniqueCategories.Remove(oldCategory);
+                UniqueCategories.Add(updatedEvent.Category);
+            }
+
+            // If date changed, update EventsByDate
+            var newDateKey = updatedEvent.EventDate.Date;
+            if (oldDateKey != newDateKey)
+            {
+                // Remove from old date
+                if (EventsByDate.ContainsKey(oldDateKey))
+                {
+                    EventsByDate[oldDateKey].Remove(existingEvent);
+                    if (EventsByDate[oldDateKey].Count == 0)
+                    {
+                        EventsByDate.Remove(oldDateKey);
+                    }
+                }
+
+                // Add to new date
+                if (!EventsByDate.ContainsKey(newDateKey))
+                {
+                    EventsByDate[newDateKey] = new List<Event>();
+                }
+                EventsByDate[newDateKey].Add(existingEvent);
+            }
+
+            // Update UpcomingEvents
+            UpcomingEvents.Remove(oldDateKey);
+            UpcomingEvents[updatedEvent.EventDate] = existingEvent;
+
+            return true;
+        }
+
+        public Event GetEventById(int id)
+        {
+            return _allEvents.FirstOrDefault(e => e.Id == id);
+        }
+
         public List<Event> GetRecommendedEvents(int count = 3)
         {
             // Simple recommendation based on most searched terms

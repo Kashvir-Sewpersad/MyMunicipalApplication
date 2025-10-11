@@ -1,6 +1,6 @@
 :root {
-  --primary-glow: #4facfe;
-  --accent-glow: #00f2fe;
+  --primary-color: #007bff;
+  --secondary-color: #6c757d;
 }
 
 html {
@@ -147,11 +147,9 @@ body {
 .glowing-text {
     font-size: 3.5rem;
     font-weight: bold;
-    color: #fff;
-    text-shadow: 0 0 10px rgba(255, 255, 255, 0.7), 0 0 20px rgba(37, 140, 251, 0.8), 0 0 30px rgba(37, 140, 251, 0.6);
+    color: #000000;
     margin-bottom: 0.5rem;
     letter-spacing: 2px;
-    animation: glow 2s infinite alternate;
 }
 
 @keyframes glow {
@@ -166,9 +164,8 @@ body {
 
 .subtitle {
     font-size: 1.2rem;
-    color: #e0e0e0;
-    opacity: 0;
-    animation: fadeIn 1.5s ease-out 0.5s forwards;
+    color: #333333;
+    opacity: 1;
 }
 
 /* Menu container */
@@ -201,67 +198,37 @@ body {
 
 /* Neon border */
 .neon-border {
-    background-color: rgba(0, 0, 0, 0.7);
+    background-color: #f8f9fa;
     border-radius: 15px;
     padding: 2rem;
     text-align: center;
     position: relative;
-    border: 2px solid transparent;
-    box-shadow: 0 0 15px rgba(37, 140, 251, 0.5), inset 0 0 15px rgba(37, 140, 251, 0.1);
+    border: 2px solid #dee2e6;
     transition: all 0.3s ease;
     overflow: hidden;
 }
 
-    .neon-border::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        border-radius: 15px;
-        padding: 2px;
-        background: linear-gradient(45deg, #258cfb, #4facfe, #00f2fe, #258cfb);
-        -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-        z-index: -1;
-        opacity: 0.7;
-    }
-
 .menu-item:hover .neon-border {
     transform: translateY(-10px);
-    box-shadow: 0 15px 30px rgba(37, 140, 251, 0.7), inset 0 0 20px rgba(37, 140, 251, 0.2);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-    .menu-item:hover .neon-border::before {
-        animation: neonGlow 1.5s infinite alternate;
-    }
-
-@keyframes neonGlow {
-    from {
-        opacity: 0.7;
-    }
-
-    to {
-        opacity: 1;
-    }
-}
 
 /* Menu icons */
 .menu-icon {
     font-size: 3rem;
-    color: #258cfb;
+    color: #007bff;
     margin-bottom: 1rem;
-    text-shadow: 0 0 10px rgba(37, 140, 251, 0.8);
 }
 
 .menu-item h2 {
-    color: #fff;
+    color: #000000;
     font-size: 1.8rem;
     margin-bottom: 0.5rem;
 }
 
 .menu-item p {
-    color: #ccc;
+    color: #666666;
     margin-bottom: 1.5rem;
 }
 
@@ -269,9 +236,9 @@ body {
 .neon-button {
     display: inline-block;
     padding: 0.7rem 1.5rem;
-    background-color: rgba(37, 140, 251, 0.2);
-    color: #fff;
-    border: 2px solid #258cfb;
+    background-color: #007bff;
+    color: #ffffff;
+    border: 2px solid #007bff;
     border-radius: 30px;
     text-decoration: none;
     font-weight: bold;
@@ -282,27 +249,11 @@ body {
     z-index: 1;
 }
 
-    .neon-button::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(45deg, #258cfb, #4facfe, #00f2fe);
-        z-index: -1;
-        opacity: 0;
-        transition: opacity 0.3s ease;
-    }
-
-    .neon-button:hover::before {
-        opacity: 1;
-    }
-
     .neon-button:hover {
-        color: #000;
-        box-shadow: 0 0 15px rgba(37, 140, 251, 0.8), 0 0 25px rgba(37, 140, 251, 0.6);
+        background-color: #0056b3;
+        border-color: #0056b3;
         transform: translateY(-3px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
 
     .neon-button.disabled {
@@ -411,22 +362,16 @@ body {
 /* Futuristic Report Issues Styles */
 
 body {
-    background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
-    color: #fff;
+    background: #ffffff;
+    color: #000000;
     min-height: 100vh;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     overflow-x: hidden;
 }
 
-/* Animated background particles */
+/* Animated background particles - hidden */
 .particles {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -1;
-    overflow: hidden;
+    display: none;
 }
 
 .particle {
@@ -528,67 +473,27 @@ body {
 .glowing-text {
     font-size: 3rem;
     font-weight: bold;
-    color: #fff;
-    text-shadow: 0 0 10px rgba(255, 255, 255, 0.7), 0 0 20px rgba(37, 140, 251, 0.8), 0 0 30px rgba(37, 140, 251, 0.6);
+    color: #000000;
     margin-bottom: 0.5rem;
     letter-spacing: 2px;
-    animation: glow 2s infinite alternate;
 }
 
-@keyframes glow {
-    from {
-        text-shadow: 0 0 10px rgba(255, 255, 255, 0.7), 0 0 20px rgba(37, 140, 251, 0.8), 0 0 30px rgba(37, 140, 251, 0.6);
-    }
-
-    to {
-        text-shadow: 0 0 15px rgba(255, 255, 255, 0.9), 0 0 25px rgba(37, 140, 251, 1), 0 0 35px rgba(37, 140, 251, 0.8);
-    }
-}
 
 .subtitle {
     font-size: 1.1rem;
-    color: #e0e0e0;
-    opacity: 0;
-    animation: fadeIn 1.5s ease-out 0.5s forwards;
+    color: #333333;
 }
 
 /* ############################################# Neon card ################################################### */
 .neon-card {
-    background-color: rgba(0, 0, 0, 0.8);
+    background-color: #ffffff;
     border-radius: 20px;
     padding: 2.5rem;
     position: relative;
-    border: 2px solid transparent;
-    box-shadow: 0 0 20px rgba(37, 140, 251, 0.4), inset 0 0 20px rgba(37, 140, 251, 0.1);
-    backdrop-filter: blur(10px);
-    animation: slideInUp 1s ease-out 0.3s both;
+    border: 2px solid #dee2e6;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-    .neon-card::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        border-radius: 20px;
-        padding: 2px;
-        background: linear-gradient(45deg, #258cfb, #4facfe, #00f2fe, #258cfb);
-        -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-        z-index: -1;
-        opacity: 0.6;
-        animation: borderGlow 3s ease-in-out infinite alternate;
-    }
-
-@keyframes borderGlow {
-    from {
-        opacity: 0.6;
-    }
-
-    to {
-        opacity: 1;
-    }
-}
 
 /*--------------------------------------- Progress section -------------------------------------------*/
 .progress-section {
@@ -752,24 +657,23 @@ body {
 }
 
 .neon-input, .neon-select, .neon-textarea {
-    background: rgba(255, 255, 255, 0.05);
-    border: 2px solid rgba(37, 140, 251, 0.3);
+    background: #ffffff;
+    border: 2px solid #ced4da;
     border-radius: 12px;
-    color: #fff;
+    color: #000000;
     padding: 0.8rem 1rem;
     transition: all 0.3s ease;
-    backdrop-filter: blur(5px);
 }
 
     .neon-input:focus, .neon-select:focus, .neon-textarea:focus {
-        background: rgba(255, 255, 255, 0.08);
-        border-color: #4facfe;
-        box-shadow: 0 0 15px rgba(79, 172, 254, 0.3);
+        background: #ffffff;
+        border-color: #007bff;
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
         outline: none;
     }
 
     .neon-input::placeholder, .neon-textarea::placeholder {
-        color: rgba(255, 255, 255, 0.5);
+        color: #6c757d;
     }
 
     .neon-input.is-valid, .neon-select.is-valid, .neon-textarea.is-valid {
@@ -783,10 +687,9 @@ body {
     }
 
 .form-label {
-    color: #4facfe;
+    color: #000000;
     font-weight: 500;
     margin-bottom: 0.5rem;
-    text-shadow: 0 0 3px rgba(79, 172, 254, 0.5);
 }
 
 .invalid-feedback, .form-text {
@@ -836,10 +739,10 @@ body {
 
 /* Neon button */
 .neon-button {
-    background: linear-gradient(45deg, #258cfb, #4facfe);
+    background: #007bff;
     border: none;
     border-radius: 30px;
-    color: #fff;
+    color: #ffffff;
     padding: 1rem 2rem;
     font-weight: bold;
     cursor: pointer;
@@ -848,28 +751,13 @@ body {
     overflow: hidden;
     text-transform: uppercase;
     letter-spacing: 1px;
-    box-shadow: 0 0 20px rgba(37, 140, 251, 0.3);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-    .neon-button::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(255, 255, 255, 0.2);
-        transform: translateX(-100%);
-        transition: transform 0.3s ease;
-    }
-
-    .neon-button:hover::before {
-        transform: translateX(0);
-    }
-
     .neon-button:hover {
+        background: #0056b3;
         transform: translateY(-3px);
-        box-shadow: 0 10px 30px rgba(37, 140, 251, 0.5);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
     }
 
     .neon-button:disabled {
@@ -883,10 +771,10 @@ body {
 
 /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Back button  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
 .back-btn {
-    background: rgba(255, 255, 255, 0.1);
-    border: 2px solid rgba(255, 255, 255, 0.2);
+    background: #6c757d;
+    border: 2px solid #6c757d;
     border-radius: 25px;
-    color: #e0e0e0;
+    color: #ffffff;
     padding: 0.6rem 1.2rem;
     text-decoration: none;
     transition: all 0.3s ease;
@@ -896,9 +784,9 @@ body {
 }
 
     .back-btn:hover {
-        background: rgba(255, 255, 255, 0.15);
-        border-color: rgba(255, 255, 255, 0.4);
-        color: #fff;
+        background: #5a6268;
+        border-color: #5a6268;
+        color: #ffffff;
         text-decoration: none;
     }
 
