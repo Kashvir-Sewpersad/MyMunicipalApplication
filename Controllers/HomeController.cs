@@ -69,8 +69,8 @@ namespace Programming_7312_Part_1.Controllers
                 model.AttachedFilePath = "/uploads/" + fileName;
             }
 
-            // Store issues 
-            _issueStorage.ReportedIssues.AddLast(model);
+            // Store issues
+            _issueStorage.AddIssue(model);
 
             ViewBag.SuccessMessage = "Issue reported successfully!";
             ViewBag.EngagementMessage = "Your reports make our community better!";

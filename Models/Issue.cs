@@ -6,8 +6,10 @@ namespace Programming_7312_Part_1.Models
 {
     public class Issue
     {
+        public int Id { get; set; }
+
         [Required]
-        public string? Location { get; set; } 
+        public string? Location { get; set; }
 
         [Required]
         public string? Category { get; set; } 
@@ -15,9 +17,11 @@ namespace Programming_7312_Part_1.Models
         [Required]
         public string? Description { get; set; } 
 
-        public string? AttachedFilePath { get; set; } // optional attachment 
+        public string? AttachedFilePath { get; set; } // optional attachment
 
-        public DateTime ReportedDate { get; set; } // to be set to current date and time off submission 
+        public string Status { get; set; } = "Pending";
+
+        public DateTime ReportedDate { get; set; } // to be set to current date and time off submission
 
         public Issue()
         {
