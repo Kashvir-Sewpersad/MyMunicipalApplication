@@ -115,6 +115,12 @@
                     <div class="page-title">
                         <h1 class="glowing-text">Local Events & Announcements</h1>
                         <p class="subtitle">Stay informed about what's happening in your community</p>
+                        <!-- Announcements Button -->
+                        <div class="text-center mt-3">
+                            <button class="btn btn-outline-primary neon-button" onclick="scrollToAnnouncement()">
+                                <i class="fas fa-bullhorn"></i> Announcements
+                            </button>
+                        </div>
                     </div>
 
                     <!-- Search and Filter Section -->
@@ -341,6 +347,22 @@
                     </div>
 
                     <!-- Back to Main Menu Button -->
+                    <!-- Important Announcement Section -->
+                    <div id="announcement" class="announcement-section">
+                        <h3 class="section-title">Important Announcement</h3>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="event-card neon-card">
+                                    <div class="position-relative">
+                                        <img src="~/Images/coat of arms .jpeg" class="event-image" alt="Municipality Announcement">
+                                    </div>
+                                    <div class="p-3">
+                                        <p class="card-text">There will be no water in the area of Upper Newlands on 18 November 2025 from 08:00 to 17:00 due to planned maintenance of water infrastructure - Municipality.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="text-center mt-4">
                         <a href="@Url.Action("Index", "Home")" class="btn btn-outline-light neon-button">
                             <i class="fas fa-arrow-left"></i> Back to Main Menu
@@ -449,6 +471,14 @@
                     });
                 }
             });
+
+            // Function to scroll to announcement
+            window.scrollToAnnouncement = function() {
+                const announcement = document.getElementById('announcement');
+                if (announcement) {
+                    announcement.scrollIntoView({ behavior: 'smooth' });
+                }
+            };
         });
     </script>
 </body>
