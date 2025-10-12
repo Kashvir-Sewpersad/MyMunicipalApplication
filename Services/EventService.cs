@@ -393,6 +393,92 @@ namespace Programming_7312_Part_1.Services
 
             return recommendedEvents.Take(count).ToList();
         }
+
+        public List<Event> GetUpcomingEventsByCategory(string category, int count = 5)
+        {
+            return UpcomingEvents
+                .Where(kv => kv.Key >= DateTime.Now && kv.Value.Category.Equals(category, StringComparison.OrdinalIgnoreCase))
+                .Take(count)
+                .Select(kv => kv.Value)
+                .ToList();
+        }
+
+        public List<Event> GetFeaturedEventsByCategory(string category, int count = 3)
+        {
+            return FeaturedEvents
+                .Where(e => e.Category.Equals(category, StringComparison.OrdinalIgnoreCase))
+                .Take(count)
+                .ToList();
+        }
+
+        public List<Event> GetRecommendedEventsByCategory(string category, int count = 3)
+        {
+            // Recommendation based on upvotes and search history, filtered by category
+            var recommendedEvents = new List<Event>();
+
+            // First, prioritize events with high upvotes in this category
+            var highVotedEvents = _allEvents
+                .Where(e => e.Category.Equals(category, StringComparison.OrdinalIgnoreCase) && e.Upvotes > 0)
+                .OrderByDescending(e => e.Upvotes - e.Downvotes) // Net positive votes
+                .ThenBy(e => e.EventDate)
+                .Take(count)
+                .ToList();
+
+            recommendedEvents.AddRange(highVotedEvents);
+
+            // If we need more, use search history
+            if (recommendedEvents.Count < count && SearchHistory.Count > 0)
+            {
+                var topSearches = SearchHistory
+                    .OrderByDescending(kv => kv.Value)
+                    .Take(3)
+                    .Select(kv => kv.Key)
+                    .ToList();
+
+                var usedEventIds = new HashSet<int>(recommendedEvents.Select(e => e.Id));
+
+                foreach (var search in topSearches)
+                {
+                    var events = _allEvents
+                        .Where(e => e.Category.Equals(category, StringComparison.OrdinalIgnoreCase) &&
+                                   !usedEventIds.Contains(e.Id) && (
+                            e.Title.ToLower().Contains(search) ||
+                            e.Description.ToLower().Contains(search) ||
+                            e.Category.ToLower().Contains(search) ||
+                            e.Location.ToLower().Contains(search) ||
+                            e.Tags.Any(tag => tag.ToLower().Contains(search))))
+                        .OrderByDescending(e => e.Upvotes - e.Downvotes)
+                        .ThenBy(e => e.EventDate)
+                        .Take(2) // Take up to 2 events per search term
+                        .ToList();
+
+                    foreach (var eventItem in events)
+                    {
+                        recommendedEvents.Add(eventItem);
+                        usedEventIds.Add(eventItem.Id);
+
+                        if (recommendedEvents.Count >= count)
+                            break;
+                    }
+
+                    if (recommendedEvents.Count >= count)
+                        break;
+                }
+            }
+
+            // If still not enough, fill with upcoming events in this category
+            if (recommendedEvents.Count < count)
+            {
+                var usedEventIds = new HashSet<int>(recommendedEvents.Select(e => e.Id));
+                var upcoming = GetUpcomingEventsByCategory(category, count - recommendedEvents.Count)
+                    .Where(e => !usedEventIds.Contains(e.Id))
+                    .ToList();
+
+                recommendedEvents.AddRange(upcoming);
+            }
+
+            return recommendedEvents.Take(count).ToList();
+        }
     }
 }
 

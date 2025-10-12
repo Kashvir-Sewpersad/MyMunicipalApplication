@@ -89,20 +89,29 @@ namespace Programming_7312_Part_1.Controllers
             {
                 events = _eventService.GetEventsByCategory(category);
                 ViewBag.SelectedCategory = category;
+
+                // Filter other sections by category as well
+                ViewBag.UpcomingEvents = _eventService.GetUpcomingEventsByCategory(category, 3);
+                ViewBag.FeaturedEvents = _eventService.GetFeaturedEventsByCategory(category, 3);
+                ViewBag.RecommendedEvents = _eventService.GetRecommendedEventsByCategory(category, 3);
             }
             else if (!string.IsNullOrEmpty(searchTerm))
             {
                 events = _eventService.SearchEvents(searchTerm);
                 ViewBag.SearchTerm = searchTerm;
+
+                ViewBag.UpcomingEvents = _eventService.GetUpcomingEvents(3);
+                ViewBag.FeaturedEvents = _eventService.GetFeaturedEvents(3);
+                ViewBag.RecommendedEvents = _eventService.GetRecommendedEvents(3);
             }
             else
             {
                 events = _eventService.GetAllEvents();
-            }
 
-            ViewBag.UpcomingEvents = _eventService.GetUpcomingEvents(3);
-            ViewBag.FeaturedEvents = _eventService.GetFeaturedEvents(3);
-            ViewBag.RecommendedEvents = _eventService.GetRecommendedEvents(3);
+                ViewBag.UpcomingEvents = _eventService.GetUpcomingEvents(3);
+                ViewBag.FeaturedEvents = _eventService.GetFeaturedEvents(3);
+                ViewBag.RecommendedEvents = _eventService.GetRecommendedEvents(3);
+            }
 
             return View(events);
         }
