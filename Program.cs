@@ -1,4 +1,6 @@
 // Program.cs
+using Microsoft.EntityFrameworkCore;
+using Programming_7312_Part_1.Data;
 using Programming_7312_Part_1.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,9 +9,13 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddSession();
 
+// Register DbContext
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 // Register our services
 builder.Services.AddSingleton<IssueStorage>();
-builder.Services.AddSingleton<EventService>();
+builder.Services.AddScoped<EventService>();
 
 var app = builder.Build();
 

@@ -1,4 +1,5 @@
 ﻿// Services/EventService.cs
+using Programming_7312_Part_1.Data;
 using Programming_7312_Part_1.Models;
 using System;
 using System.Collections.Generic;
@@ -8,6 +9,8 @@ namespace Programming_7312_Part_1.Services
 {
     public class EventService
     {
+        private readonly ApplicationDbContext _context;
+
         // Sorted dictionary for organizing events by date
         public SortedDictionary<DateTime, List<Event>> EventsByDate { get; } = new SortedDictionary<DateTime, List<Event>>();
 
@@ -29,22 +32,35 @@ namespace Programming_7312_Part_1.Services
         // Dictionary for user search history
         public Dictionary<string, int> SearchHistory { get; } = new Dictionary<string, int>();
 
-        // List to store all events
-        private List<Event> _allEvents = new List<Event>();
-
-        public EventService()
+        public EventService(ApplicationDbContext context)
         {
-            // Initialize with some sample events
-            InitializeSampleEvents();
+            _context = context ?? throw new ArgumentNullException(nameof(context));
+            InitializeDataStructures();
         }
 
-        private void InitializeSampleEvents()
+        private void InitializeDataStructures()
+        {
+            // Load all events from database
+            var allEvents = _context.Events.ToList();
+
+            foreach (var eventItem in allEvents)
+            {
+                AddEventToDataStructures(eventItem);
+            }
+
+            // If no events exist, seed sample events
+            if (!allEvents.Any())
+            {
+                SeedSampleEvents();
+            }
+        }
+
+        private void SeedSampleEvents()
         {
             var sampleEvents = new List<Event>
             {
                 new Event
                 {
-                    Id = 1,
                     Title = "Pothole Patch-Up",
                     Description = "This community event is structured to putting an end to those pesky potholes.Join us to make our environment safer.",
                     Category = "Environment",
@@ -54,7 +70,6 @@ namespace Programming_7312_Part_1.Services
                 },
                 new Event
                 {
-                    Id = 2,
                     Title = "Wild Life Conservation",
                     Description = "Enjoy the wildlife local to the Tokai mountains. Bring trail snacks and water",
                     Category = "Entertainment",
@@ -64,7 +79,6 @@ namespace Programming_7312_Part_1.Services
                 },
                 new Event
                 {
-                    Id = 3,
                     Title = "Crime Talk",
                     Description = "Learn about common crimes and prevention",
                     Category = "Education",
@@ -74,7 +88,6 @@ namespace Programming_7312_Part_1.Services
                 },
                 new Event
                 {
-                    Id = 4,
                     Title = "Health Awareness Event",
                     Description = "Join fellow residents for a Hike through the Newlands forrest",
                     Category = "Health",
@@ -84,7 +97,6 @@ namespace Programming_7312_Part_1.Services
                 },
                 new Event
                 {
-                    Id = 5,
                     Title = "Youth Sports ",
                     Description = "Come and support the next generation of athletes",
                     Category = "Sports",
@@ -96,14 +108,27 @@ namespace Programming_7312_Part_1.Services
 
             foreach (var eventItem in sampleEvents)
             {
-                AddEvent(eventItem);
+                _context.Events.Add(eventItem);
+            }
+            _context.SaveChanges();
+
+            // Now add to data structures
+            foreach (var eventItem in sampleEvents)
+            {
+                AddEventToDataStructures(eventItem);
             }
         }
 
         public void AddEvent(Event eventItem)
         {
-            _allEvents.Add(eventItem);
+            _context.Events.Add(eventItem);
+            _context.SaveChanges();
 
+            AddEventToDataStructures(eventItem);
+        }
+
+        private void AddEventToDataStructures(Event eventItem)
+        {
             // Add to EventsByDate
             var dateKey = eventItem.EventDate.Date;
             if (!EventsByDate.ContainsKey(dateKey))
@@ -142,7 +167,7 @@ namespace Programming_7312_Part_1.Services
 
         public List<Event> GetAllEvents()
         {
-            return _allEvents.OrderBy(e => e.EventDate).ToList();
+            return _context.Events.OrderBy(e => e.EventDate).ToList();
         }
 
         public List<Event> GetEventsByCategory(string category)
@@ -213,7 +238,7 @@ namespace Programming_7312_Part_1.Services
 
             searchTerm = searchTerm.ToLower().Trim();
 
-            return _allEvents
+            return _context.Events
                 .Where(e =>
                     e.Title.ToLower().Contains(searchTerm) ||
                     e.Description.ToLower().Contains(searchTerm) ||
@@ -226,7 +251,7 @@ namespace Programming_7312_Part_1.Services
 
         public bool UpdateEvent(Event updatedEvent)
         {
-            var existingEvent = _allEvents.FirstOrDefault(e => e.Id == updatedEvent.Id);
+            var existingEvent = _context.Events.FirstOrDefault(e => e.Id == updatedEvent.Id);
             if (existingEvent == null)
             {
                 return false;
@@ -245,13 +270,23 @@ namespace Programming_7312_Part_1.Services
             existingEvent.ImagePath = updatedEvent.ImagePath;
             existingEvent.Tags = updatedEvent.Tags ?? new List<string>();
 
+            _context.SaveChanges();
+
+            // Update data structures
+            UpdateEventInDataStructures(existingEvent, oldDateKey, oldCategory);
+
+            return true;
+        }
+
+        private void UpdateEventInDataStructures(Event updatedEvent, DateTime oldDateKey, string oldCategory)
+        {
             // If category changed, update EventsByCategory
             if (oldCategory != updatedEvent.Category)
             {
                 // Remove from old category
                 if (EventsByCategory.ContainsKey(oldCategory))
                 {
-                    EventsByCategory[oldCategory].Remove(existingEvent);
+                    EventsByCategory[oldCategory].RemoveAll(e => e.Id == updatedEvent.Id);
                     if (EventsByCategory[oldCategory].Count == 0)
                     {
                         EventsByCategory.Remove(oldCategory);
@@ -263,7 +298,7 @@ namespace Programming_7312_Part_1.Services
                 {
                     EventsByCategory[updatedEvent.Category] = new List<Event>();
                 }
-                EventsByCategory[updatedEvent.Category].Add(existingEvent);
+                EventsByCategory[updatedEvent.Category].Add(updatedEvent);
 
                 // Update UniqueCategories
                 UniqueCategories.Remove(oldCategory);
@@ -277,7 +312,7 @@ namespace Programming_7312_Part_1.Services
                 // Remove from old date
                 if (EventsByDate.ContainsKey(oldDateKey))
                 {
-                    EventsByDate[oldDateKey].Remove(existingEvent);
+                    EventsByDate[oldDateKey].RemoveAll(e => e.Id == updatedEvent.Id);
                     if (EventsByDate[oldDateKey].Count == 0)
                     {
                         EventsByDate.Remove(oldDateKey);
@@ -289,19 +324,17 @@ namespace Programming_7312_Part_1.Services
                 {
                     EventsByDate[newDateKey] = new List<Event>();
                 }
-                EventsByDate[newDateKey].Add(existingEvent);
+                EventsByDate[newDateKey].Add(updatedEvent);
             }
 
             // Update UpcomingEvents
             UpcomingEvents.Remove(oldDateKey);
-            UpcomingEvents[updatedEvent.EventDate] = existingEvent;
-
-            return true;
+            UpcomingEvents[updatedEvent.EventDate] = updatedEvent;
         }
 
         public Event GetEventById(int id)
         {
-            return _allEvents.FirstOrDefault(e => e.Id == id);
+            return _context.Events.FirstOrDefault(e => e.Id == id);
         }
 
         public bool UpvoteEvent(int eventId)
@@ -310,6 +343,7 @@ namespace Programming_7312_Part_1.Services
             if (eventItem != null)
             {
                 eventItem.Upvotes++;
+                _context.SaveChanges();
                 return true;
             }
             return false;
@@ -321,6 +355,7 @@ namespace Programming_7312_Part_1.Services
             if (eventItem != null)
             {
                 eventItem.Downvotes++;
+                _context.SaveChanges();
                 return true;
             }
             return false;
@@ -332,7 +367,7 @@ namespace Programming_7312_Part_1.Services
             var recommendedEvents = new List<Event>();
 
             // First, prioritize events with high upvotes
-            var highVotedEvents = _allEvents
+            var highVotedEvents = _context.Events
                 .Where(e => e.Upvotes > 0)
                 .OrderByDescending(e => e.Upvotes - e.Downvotes) // Net positive votes
                 .ThenBy(e => e.EventDate)
@@ -354,7 +389,7 @@ namespace Programming_7312_Part_1.Services
 
                 foreach (var search in topSearches)
                 {
-                    var events = _allEvents
+                    var events = _context.Events
                         .Where(e => !usedEventIds.Contains(e.Id) && (
                             e.Title.ToLower().Contains(search) ||
                             e.Description.ToLower().Contains(search) ||
@@ -417,7 +452,7 @@ namespace Programming_7312_Part_1.Services
             var recommendedEvents = new List<Event>();
 
             // First, prioritize events with high upvotes in this category
-            var highVotedEvents = _allEvents
+            var highVotedEvents = _context.Events
                 .Where(e => e.Category.Equals(category, StringComparison.OrdinalIgnoreCase) && e.Upvotes > 0)
                 .OrderByDescending(e => e.Upvotes - e.Downvotes) // Net positive votes
                 .ThenBy(e => e.EventDate)
@@ -439,9 +474,9 @@ namespace Programming_7312_Part_1.Services
 
                 foreach (var search in topSearches)
                 {
-                    var events = _allEvents
+                    var events = _context.Events
                         .Where(e => e.Category.Equals(category, StringComparison.OrdinalIgnoreCase) &&
-                                   !usedEventIds.Contains(e.Id) && (
+                                    !usedEventIds.Contains(e.Id) && (
                             e.Title.ToLower().Contains(search) ||
                             e.Description.ToLower().Contains(search) ||
                             e.Category.ToLower().Contains(search) ||
