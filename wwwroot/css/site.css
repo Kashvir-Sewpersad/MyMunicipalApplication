@@ -495,7 +495,7 @@ body {
 }
 
 .progress-title {
-    color: #fff;
+    color: #000000;
     font-weight: 600;
     font-size: 1.1rem;
     text-shadow: 0 0 5px rgba(37, 140, 251, 0.5);
@@ -557,7 +557,7 @@ body {
 }
 
 .milestone-title {
-    color: #fff;
+    color: #000000;
     font-size: 1.2rem;
     font-weight: 600;
     margin-bottom: 1rem;
@@ -615,7 +615,7 @@ body {
 }
 
 .milestone-text {
-    color: #e0e0e0;
+    color: #000000;
     font-weight: 500;
     flex: 1;
 }
@@ -680,7 +680,7 @@ body {
 }
 
 .invalid-feedback, .form-text {
-    color: rgba(255, 255, 255, 0.7);
+    color: #6c757d;
     font-size: 0.85rem;
     margin-top: 0.3rem;
 }
