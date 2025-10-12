@@ -3,6 +3,8 @@
 
 @{
     ViewData["Title"] = "Local Events and Announcements";
+    var images = new[] { "comunity.jpg", "crime.jpg", "hippo.png", "newlands.jpg", "pothole.jpg", "tokai.jpeg" };
+    int imageIndex = 0;
 }
 
 <!DOCTYPE html>
@@ -155,11 +157,10 @@
                                     <div class="col-md-4">
                                         <div class="event-card neon-card">
                                             <div class="position-relative">
-                                                <img src="@(string.IsNullOrEmpty(eventItem.ImagePath) ? "https://picsum.photos/seed/event" + eventItem.Id + "/600/400.jpg" : eventItem.ImagePath)"
-                                                     class="event-image" alt="@eventItem.Title">
+                                                <img src="~/Images/@(images[imageIndex++ % images.Length])" class="event-image" alt="@eventItem.Title">
                                                 <div class="event-date-badge">
-                                                    <i class="far fa-calendar-alt"></i> @eventItem.EventDate.ToString("MMM dd")
-                                                </div>
+                                                     <i class="far fa-calendar-alt"></i> @eventItem.EventDate.ToString("MMM dd")
+                                                 </div>
                                             </div>
                                             <div class="p-3">
                                                 <h5>@eventItem.Title</h5>
@@ -198,8 +199,7 @@
                                     <div class="col-md-4">
                                         <div class="event-card neon-card">
                                             <div class="position-relative">
-                                                <img src="@(string.IsNullOrEmpty(eventItem.ImagePath) ? "https://picsum.photos/seed/event" + eventItem.Id + "/600/400.jpg" : eventItem.ImagePath)"
-                                                     class="event-image" alt="@eventItem.Title">
+                                                <img src="~/Images/@(images[imageIndex++ % images.Length])" class="event-image" alt="@eventItem.Title">
                                                 <div class="event-date-badge">
                                                     <i class="far fa-calendar-alt"></i> @eventItem.EventDate.ToString("MMM dd")
                                                 </div>
@@ -241,11 +241,10 @@
                                     <div class="col-md-4">
                                         <div class="event-card neon-card">
                                             <div class="position-relative">
-                                                <img src="@(string.IsNullOrEmpty(eventItem.ImagePath) ? "https://picsum.photos/seed/event" + eventItem.Id + "/600/400.jpg" : eventItem.ImagePath)"
-                                                     class="event-image" alt="@eventItem.Title">
+                                                <img src="~/Images/@(images[imageIndex++ % images.Length])" class="event-image" alt="@eventItem.Title">
                                                 <div class="event-date-badge">
-                                                    <i class="far fa-calendar-alt"></i> @eventItem.EventDate.ToString("MMM dd")
-                                                </div>
+                                                     <i class="far fa-calendar-alt"></i> @eventItem.EventDate.ToString("MMM dd")
+                                                 </div>
                                             </div>
                                             <div class="p-3">
                                                 <h5>@eventItem.Title</h5>
@@ -293,11 +292,10 @@
                                     <div class="col-md-4">
                                         <div class="event-card neon-card">
                                             <div class="position-relative">
-                                                <img src="@(string.IsNullOrEmpty(eventItem.ImagePath) ? "https://picsum.photos/seed/event" + eventItem.Id + "/600/400.jpg" : eventItem.ImagePath)"
-                                                     class="event-image" alt="@eventItem.Title">
+                                                <img src="~/Images/@(images[imageIndex++ % images.Length])" class="event-image" alt="@eventItem.Title">
                                                 <div class="event-date-badge">
-                                                    <i class="far fa-calendar-alt"></i> @eventItem.EventDate.ToString("MMM dd")
-                                                </div>
+                                                     <i class="far fa-calendar-alt"></i> @eventItem.EventDate.ToString("MMM dd")
+                                                 </div>
                                             </div>
                                             <div class="p-3">
                                                 <h5>@eventItem.Title</h5>

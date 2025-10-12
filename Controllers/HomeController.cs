@@ -140,6 +140,18 @@ namespace Programming_7312_Part_1.Controllers
             return Json(new { success = false });
         }
 
+        [HttpPost]
+        public IActionResult UpvoteIssue(int issueId)
+        {
+            var success = _issueStorage.UpvoteIssue(issueId);
+            if (success)
+            {
+                var issue = _issueStorage.GetIssueById(issueId);
+                return Json(new { success = true, upvotes = issue.Upvotes });
+            }
+            return Json(new { success = false });
+        }
+
         public IActionResult Error()
         {
             return View();

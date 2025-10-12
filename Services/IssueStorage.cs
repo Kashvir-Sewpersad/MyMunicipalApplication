@@ -16,6 +16,22 @@ namespace Programming_7312_Part_1.Services
             issue.Id = _nextId++;
             ReportedIssues.AddLast(issue);
         }
+
+        public Issue GetIssueById(int issueId)
+        {
+            return ReportedIssues.FirstOrDefault(i => i.Id == issueId);
+        }
+
+        public bool UpvoteIssue(int issueId)
+        {
+            var issue = GetIssueById(issueId);
+            if (issue != null)
+            {
+                issue.Upvotes++;
+                return true;
+            }
+            return false;
+        }
     }
 }
 //*------ end of file --------------//

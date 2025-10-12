@@ -1,12 +1,9 @@
+C:\Users\kashc\RiderProjects\Programming-7312-Part-1-master\bin\Debug\net8.0\Programming 7312 Part-1.exe
+C:\Users\kashc\RiderProjects\Programming-7312-Part-1-master\bin\Debug\net8.0\Programming 7312 Part-1.dll
 C:\Users\kashc\RiderProjects\Programming-7312-Part-1-master\bin\Debug\net8.0\appsettings.Development.json
 C:\Users\kashc\RiderProjects\Programming-7312-Part-1-master\bin\Debug\net8.0\appsettings.json
 C:\Users\kashc\RiderProjects\Programming-7312-Part-1-master\bin\Debug\net8.0\Programming 7312 Part-1.staticwebassets.runtime.json
 C:\Users\kashc\RiderProjects\Programming-7312-Part-1-master\bin\Debug\net8.0\Programming 7312 Part-1.staticwebassets.endpoints.json
-C:\Users\kashc\RiderProjects\Programming-7312-Part-1-master\bin\Debug\net8.0\Programming 7312 Part-1.exe
-C:\Users\kashc\RiderProjects\Programming-7312-Part-1-master\bin\Debug\net8.0\Programming 7312 Part-1.deps.json
-C:\Users\kashc\RiderProjects\Programming-7312-Part-1-master\bin\Debug\net8.0\Programming 7312 Part-1.runtimeconfig.json
-C:\Users\kashc\RiderProjects\Programming-7312-Part-1-master\bin\Debug\net8.0\Programming 7312 Part-1.dll
-C:\Users\kashc\RiderProjects\Programming-7312-Part-1-master\bin\Debug\net8.0\Programming 7312 Part-1.pdb
 C:\Users\kashc\RiderProjects\Programming-7312-Part-1-master\obj\Debug\net8.0\rpswa.dswa.cache.json
 C:\Users\kashc\RiderProjects\Programming-7312-Part-1-master\obj\Debug\net8.0\Programming 7312 Part-1.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\kashc\RiderProjects\Programming-7312-Part-1-master\obj\Debug\net8.0\Programming 7312 Part-1.AssemblyInfoInputs.cache
@@ -29,5 +26,8 @@ C:\Users\kashc\RiderProjects\Programming-7312-Part-1-master\obj\Debug\net8.0\sta
 C:\Users\kashc\RiderProjects\Programming-7312-Part-1-master\obj\Debug\net8.0\Programming 7312 Part-1.dll
 C:\Users\kashc\RiderProjects\Programming-7312-Part-1-master\obj\Debug\net8.0\refint\Programming 7312 Part-1.dll
 C:\Users\kashc\RiderProjects\Programming-7312-Part-1-master\obj\Debug\net8.0\Programming 7312 Part-1.pdb
+C:\Users\kashc\RiderProjects\Programming-7312-Part-1-master\bin\Debug\net8.0\Programming 7312 Part-1.deps.json
+C:\Users\kashc\RiderProjects\Programming-7312-Part-1-master\bin\Debug\net8.0\Programming 7312 Part-1.runtimeconfig.json
+C:\Users\kashc\RiderProjects\Programming-7312-Part-1-master\bin\Debug\net8.0\Programming 7312 Part-1.pdb
 C:\Users\kashc\RiderProjects\Programming-7312-Part-1-master\obj\Debug\net8.0\Programming 7312 Part-1.genruntimeconfig.cache
 C:\Users\kashc\RiderProjects\Programming-7312-Part-1-master\obj\Debug\net8.0\ref\Programming 7312 Part-1.dll

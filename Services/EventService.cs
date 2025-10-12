@@ -45,51 +45,51 @@ namespace Programming_7312_Part_1.Services
                 new Event
                 {
                     Id = 1,
-                    Title = "Community Clean-Up Day",
-                    Description = "Join us for a community-wide clean-up initiative to keep our neighborhoods beautiful.",
+                    Title = "Pothole Patch-Up",
+                    Description = "This community event is structured to putting an end to those pesky potholes.Join us to make our environment safer.",
                     Category = "Environment",
                     EventDate = DateTime.Now.AddDays(7),
-                    Location = "Central Park",
-                    Tags = new List<string> { "environment", "community", "outdoor", "volunteer" }
+                    Location = "Claremont",
+                    Tags = new List<string> { "environment", "community", "volunteer" }
                 },
                 new Event
                 {
                     Id = 2,
-                    Title = "Summer Music Festival",
-                    Description = "Enjoy live performances from local artists at our annual summer music festival.",
+                    Title = "Wild Life Conservation",
+                    Description = "Enjoy the wildlife local to the Tokai mountains. Bring trail snacks and water",
                     Category = "Entertainment",
                     EventDate = DateTime.Now.AddDays(14),
-                    Location = "City Amphitheater",
-                    Tags = new List<string> { "music", "festival", "outdoor", "family" }
+                    Location = "Tokai",
+                    Tags = new List<string> { "outdoor", "family","environment" }
                 },
                 new Event
                 {
                     Id = 3,
-                    Title = "Tech Innovation Workshop",
-                    Description = "Learn about the latest technological innovations and how they can improve municipal services.",
+                    Title = "Crime Talk",
+                    Description = "Learn about common crimes and prevention",
                     Category = "Education",
                     EventDate = DateTime.Now.AddDays(21),
-                    Location = "Community Center",
-                    Tags = new List<string> { "technology", "education", "innovation", "workshop" }
+                    Location = "Newlands Cricket Ground",
+                    Tags = new List<string> {  "education", "innovation", "workshop" }
                 },
                 new Event
                 {
                     Id = 4,
-                    Title = "Health Awareness Campaign",
-                    Description = "Free health screenings and wellness information for all residents.",
+                    Title = "Health Awareness Event",
+                    Description = "Join fellow residents for a Hike through the Newlands forrest",
                     Category = "Health",
                     EventDate = DateTime.Now.AddDays(10),
-                    Location = "City Hall",
+                    Location = "Newlands Forrest",
                     Tags = new List<string> { "health", "wellness", "free", "community" }
                 },
                 new Event
                 {
                     Id = 5,
-                    Title = "Youth Sports Tournament",
-                    Description = "Annual tournament for youth teams in various sports.",
+                    Title = "Youth Sports ",
+                    Description = "Come and support the next generation of athletes",
                     Category = "Sports",
                     EventDate = DateTime.Now.AddDays(30),
-                    Location = "Sports Complex",
+                    Location = "Newlands",
                     Tags = new List<string> { "sports", "youth", "tournament", "outdoor" }
                 }
             };
