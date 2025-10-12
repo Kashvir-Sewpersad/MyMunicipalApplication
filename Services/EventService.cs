@@ -304,53 +304,86 @@ namespace Programming_7312_Part_1.Services
             return _allEvents.FirstOrDefault(e => e.Id == id);
         }
 
+        public bool UpvoteEvent(int eventId)
+        {
+            var eventItem = GetEventById(eventId);
+            if (eventItem != null)
+            {
+                eventItem.Upvotes++;
+                return true;
+            }
+            return false;
+        }
+
+        public bool DownvoteEvent(int eventId)
+        {
+            var eventItem = GetEventById(eventId);
+            if (eventItem != null)
+            {
+                eventItem.Downvotes++;
+                return true;
+            }
+            return false;
+        }
+
         public List<Event> GetRecommendedEvents(int count = 3)
         {
-            // Simple recommendation based on most searched terms
-            if (SearchHistory.Count == 0)
-            {
-                // If no search history, return upcoming events
-                return GetUpcomingEvents(count);
-            }
+            // Recommendation based on upvotes and search history
+            var recommendedEvents = new List<Event>();
 
-            var topSearches = SearchHistory
-                .OrderByDescending(kv => kv.Value)
-                .Take(3)
-                .Select(kv => kv.Key)
+            // First, prioritize events with high upvotes
+            var highVotedEvents = _allEvents
+                .Where(e => e.Upvotes > 0)
+                .OrderByDescending(e => e.Upvotes - e.Downvotes) // Net positive votes
+                .ThenBy(e => e.EventDate)
+                .Take(count)
                 .ToList();
 
-            var recommendedEvents = new List<Event>();
-            var usedEventIds = new HashSet<int>();
+            recommendedEvents.AddRange(highVotedEvents);
 
-            foreach (var search in topSearches)
+            // If we need more, use search history
+            if (recommendedEvents.Count < count && SearchHistory.Count > 0)
             {
-                var events = _allEvents
-                    .Where(e => !usedEventIds.Contains(e.Id) && (
-                        e.Title.ToLower().Contains(search) ||
-                        e.Description.ToLower().Contains(search) ||
-                        e.Category.ToLower().Contains(search) ||
-                        e.Location.ToLower().Contains(search) ||
-                        e.Tags.Any(tag => tag.ToLower().Contains(search))))
-                    .OrderBy(e => e.EventDate)
-                    .Take(2) // Take up to 2 events per search term
+                var topSearches = SearchHistory
+                    .OrderByDescending(kv => kv.Value)
+                    .Take(3)
+                    .Select(kv => kv.Key)
                     .ToList();
 
-                foreach (var eventItem in events)
+                var usedEventIds = new HashSet<int>(recommendedEvents.Select(e => e.Id));
+
+                foreach (var search in topSearches)
                 {
-                    recommendedEvents.Add(eventItem);
-                    usedEventIds.Add(eventItem.Id);
+                    var events = _allEvents
+                        .Where(e => !usedEventIds.Contains(e.Id) && (
+                            e.Title.ToLower().Contains(search) ||
+                            e.Description.ToLower().Contains(search) ||
+                            e.Category.ToLower().Contains(search) ||
+                            e.Location.ToLower().Contains(search) ||
+                            e.Tags.Any(tag => tag.ToLower().Contains(search))))
+                        .OrderByDescending(e => e.Upvotes - e.Downvotes)
+                        .ThenBy(e => e.EventDate)
+                        .Take(2) // Take up to 2 events per search term
+                        .ToList();
+
+                    foreach (var eventItem in events)
+                    {
+                        recommendedEvents.Add(eventItem);
+                        usedEventIds.Add(eventItem.Id);
+
+                        if (recommendedEvents.Count >= count)
+                            break;
+                    }
 
                     if (recommendedEvents.Count >= count)
                         break;
                 }
-
-                if (recommendedEvents.Count >= count)
-                    break;
             }
 
-            // If we don't have enough recommendations, fill with upcoming events
+            // If still not enough, fill with upcoming events
             if (recommendedEvents.Count < count)
             {
+                var usedEventIds = new HashSet<int>(recommendedEvents.Select(e => e.Id));
                 var upcoming = GetUpcomingEvents(count - recommendedEvents.Count)
                     .Where(e => !usedEventIds.Contains(e.Id))
                     .ToList();

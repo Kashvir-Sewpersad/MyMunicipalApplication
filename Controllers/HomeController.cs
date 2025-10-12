@@ -107,6 +107,30 @@ namespace Programming_7312_Part_1.Controllers
             return View(events);
         }
 
+        [HttpPost]
+        public IActionResult UpvoteEvent(int eventId)
+        {
+            var success = _eventService.UpvoteEvent(eventId);
+            if (success)
+            {
+                var eventItem = _eventService.GetEventById(eventId);
+                return Json(new { success = true, upvotes = eventItem.Upvotes, downvotes = eventItem.Downvotes });
+            }
+            return Json(new { success = false });
+        }
+
+        [HttpPost]
+        public IActionResult DownvoteEvent(int eventId)
+        {
+            var success = _eventService.DownvoteEvent(eventId);
+            if (success)
+            {
+                var eventItem = _eventService.GetEventById(eventId);
+                return Json(new { success = true, upvotes = eventItem.Upvotes, downvotes = eventItem.Downvotes });
+            }
+            return Json(new { success = false });
+        }
+
         public IActionResult Error()
         {
             return View();

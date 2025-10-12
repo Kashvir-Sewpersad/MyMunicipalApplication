@@ -31,6 +31,10 @@ namespace Programming_7312_Part_1.Models
         // For tracking user interest
         public int ViewCount { get; set; } = 0;
 
+        // For voting system
+        public int Upvotes { get; set; } = 0;
+        public int Downvotes { get; set; } = 0;
+
         // For recommendation system
         public List<string> Tags { get; set; } = new List<string>();
     }
