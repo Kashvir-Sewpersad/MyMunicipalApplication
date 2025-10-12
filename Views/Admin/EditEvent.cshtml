@@ -28,7 +28,16 @@
 
             <div class="mb-3">
                 <label for="Category" class="form-label">Category</label>
-                <input id="Category" name="Category" class="form-control neon-input" />
+                <select id="Category" name="Category" class="form-select neon-select" required>
+                    <option value="">Select a category</option>
+                    @if (ViewBag.Categories != null)
+                    {
+                        @foreach (string category in ViewBag.Categories)
+                        {
+                            <option value="@category" selected="@(Model.Category == category)">@category</option>
+                        }
+                    }
+                </select>
             </div>
 
             <div class="mb-3">
@@ -47,8 +56,17 @@
             </div>
 
             <div class="mb-3">
-                <label for="tagsInput" class="form-label">Tags (comma-separated)</label>
-                <input id="tagsInput" name="tagsInput" class="form-control neon-input" placeholder="tag1, tag2, tag3" />
+                <label for="tagsInput" class="form-label">Tags</label>
+                <select id="tagsInput" name="tagsInput" class="form-select neon-select" multiple required>
+                    @if (ViewBag.Tags != null)
+                    {
+                        @foreach (string tag in ViewBag.Tags)
+                        {
+                            <option value="@tag">@tag</option>
+                        }
+                    }
+                </select>
+                <small class="form-text text-muted">Hold Ctrl (or Cmd on Mac) to select multiple tags</small>
             </div>
 
             <div class="d-flex gap-2">
@@ -63,4 +81,19 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Pre-select existing tags
+            const tagsInput = document.getElementById('tagsInput');
+            const existingTags = '@ViewBag.TagsInput'.split(', ').map(t => t.trim()).filter(t => t);
+
+            if (tagsInput && existingTags.length > 0) {
+                for (let option of tagsInput.options) {
+                    if (existingTags.includes(option.value)) {
+                        option.selected = true;
+                    }
+                }
+            }
+        });
+    </script>
 }

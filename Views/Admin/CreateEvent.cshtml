@@ -24,7 +24,16 @@
 
             <div class="mb-3">
                 <label for="Category" class="form-label">Category</label>
-                <input id="Category" name="Category" class="form-control neon-input" required />
+                <select id="Category" name="Category" class="form-select neon-select" required>
+                    <option value="">Select a category</option>
+                    @if (ViewBag.Categories != null)
+                    {
+                        @foreach (string category in ViewBag.Categories)
+                        {
+                            <option value="@category">@category</option>
+                        }
+                    }
+                </select>
             </div>
 
             <div class="mb-3">
@@ -41,7 +50,7 @@
                 <label class="form-label">Event Image</label>
                 <div id="drop-zone" class="drop-zone">
                     <p>Drag and drop an image here or click to select</p>
-                    <input type="file" id="imageFile" name="imageFile" accept="image/*" style="display: none;" />
+                    <input type="file" id="imageFile" name="imageFile" accept="image/*" style="display: none;" required />
                 </div>
                 <div id="preview" class="image-preview" style="display: none;">
                     <img id="preview-img" src="" alt="Preview" />
@@ -50,12 +59,21 @@
             </div>
 
             <div class="mb-3">
-                <label for="tagsInput" class="form-label">Tags (comma-separated)</label>
-                <input id="tagsInput" name="tagsInput" class="form-control neon-input" placeholder="tag1, tag2, tag3" />
+                <label for="tagsInput" class="form-label">Tags</label>
+                <select id="tagsInput" name="tagsInput" class="form-select neon-select" multiple required>
+                    @if (ViewBag.Tags != null)
+                    {
+                        @foreach (string tag in ViewBag.Tags)
+                        {
+                            <option value="@tag">@tag</option>
+                        }
+                    }
+                </select>
+                <small class="form-text text-muted">Hold Ctrl (or Cmd on Mac) to select multiple tags</small>
             </div>
 
             <div class="d-flex gap-2">
-                <button type="submit" class="btn btn-primary neon-button">Create Event</button>
+                <button type="submit" class="btn btn-primary neon-button" id="submitBtn" disabled>Create Event</button>
                 <a asp-action="Dashboard" class="btn btn-outline-secondary neon-button">Cancel</a>
             </div>
         </form>
@@ -73,6 +91,19 @@
             const preview = document.getElementById('preview');
             const previewImg = document.getElementById('preview-img');
             const removeBtn = document.getElementById('remove-image');
+            const submitBtn = document.getElementById('submitBtn');
+            const requiredFields = ['Title', 'Description', 'Category', 'EventDate', 'Location', 'imageFile', 'tagsInput'];
+
+            function checkFormValidity() {
+                let allFilled = true;
+                requiredFields.forEach(fieldId => {
+                    const field = document.getElementById(fieldId);
+                    if (!field || !field.value.trim()) {
+                        allFilled = false;
+                    }
+                });
+                submitBtn.disabled = !allFilled;
+            }
 
             // Click to select file
             dropZone.addEventListener('click', function() {
@@ -82,6 +113,7 @@
             // File input change
             fileInput.addEventListener('change', function(e) {
                 handleFile(e.target.files[0]);
+                checkFormValidity();
             });
 
             // Drag and drop events
@@ -101,6 +133,7 @@
                 const files = e.dataTransfer.files;
                 if (files.length > 0) {
                     handleFile(files[0]);
+                    checkFormValidity();
                 }
             });
 
@@ -109,6 +142,17 @@
                 fileInput.value = '';
                 preview.style.display = 'none';
                 dropZone.style.display = 'block';
+                checkFormValidity();
+            });
+
+            // Add input event listeners to required fields
+            requiredFields.forEach(fieldId => {
+                if (fieldId !== 'imageFile') {
+                    const field = document.getElementById(fieldId);
+                    if (field) {
+                        field.addEventListener('input', checkFormValidity);
+                    }
+                }
             });
 
             function handleFile(file) {
@@ -122,6 +166,9 @@
                     reader.readAsDataURL(file);
                 }
             }
+
+            // Initial check
+            checkFormValidity();
         });
     </script>
 }

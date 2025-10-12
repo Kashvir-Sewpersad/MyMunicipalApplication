@@ -20,6 +20,9 @@ namespace Programming_7312_Part_1.Services
         // HashSet for unique categories
         public HashSet<string> UniqueCategories { get; } = new HashSet<string>();
 
+        // HashSet for unique tags
+        public HashSet<string> UniqueTags { get; } = new HashSet<string>();
+
         // Queue for recently added events (FIFO)
         public Queue<Event> RecentEvents { get; } = new Queue<Event>();
 
@@ -46,6 +49,18 @@ namespace Programming_7312_Part_1.Services
             foreach (var eventItem in allEvents)
             {
                 AddEventToDataStructures(eventItem);
+            }
+
+            // Populate UniqueTags from existing events
+            foreach (var eventItem in allEvents)
+            {
+                if (eventItem.Tags != null)
+                {
+                    foreach (var tag in eventItem.Tags)
+                    {
+                        UniqueTags.Add(tag.ToLower());
+                    }
+                }
             }
 
             // If no events exist, seed sample events
@@ -146,6 +161,15 @@ namespace Programming_7312_Part_1.Services
 
             // Add to UniqueCategories
             UniqueCategories.Add(eventItem.Category);
+
+            // Add to UniqueTags
+            if (eventItem.Tags != null)
+            {
+                foreach (var tag in eventItem.Tags)
+                {
+                    UniqueTags.Add(tag.ToLower());
+                }
+            }
 
             // Add to RecentEvents (keep only last 5)
             RecentEvents.Enqueue(eventItem);
@@ -304,6 +328,15 @@ namespace Programming_7312_Part_1.Services
                 // Update UniqueCategories
                 UniqueCategories.Remove(oldCategory);
                 UniqueCategories.Add(updatedEvent.Category);
+
+                // Update UniqueTags
+                if (updatedEvent.Tags != null)
+                {
+                    foreach (var tag in updatedEvent.Tags)
+                    {
+                        UniqueTags.Add(tag.ToLower());
+                    }
+                }
             }
 
             // If date changed, update EventsByDate

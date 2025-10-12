@@ -70,6 +70,8 @@ namespace Programming_7312_Part_1.Controllers
             }
 
             ViewBag.TagsInput = string.Join(", ", eventItem.Tags ?? new List<string>());
+            ViewBag.Categories = _eventService.UniqueCategories.ToList();
+            ViewBag.Tags = _eventService.UniqueTags.ToList();
             return View(eventItem);
         }
 
@@ -81,6 +83,8 @@ namespace Programming_7312_Part_1.Controllers
                 return RedirectToAction("Login");
             }
 
+            ViewBag.Categories = _eventService.UniqueCategories.ToList();
+            ViewBag.Tags = _eventService.UniqueTags.ToList();
             return View();
         }
 
@@ -93,51 +97,73 @@ namespace Programming_7312_Part_1.Controllers
                 return RedirectToAction("Login");
             }
 
-            if (!ModelState.IsValid)
+            try
             {
+                // Validate category
+                var validCategories = _eventService.UniqueCategories.ToList();
+                if (!validCategories.Contains(model.Category))
+                {
+                    ModelState.AddModelError("Category", "Please select a valid category from the dropdown.");
+                    ViewBag.Categories = validCategories;
+                    ViewBag.Tags = _eventService.UniqueTags.ToList();
+                    return View(model);
+                }
+
+                if (!ModelState.IsValid)
+                {
+                    ViewBag.Categories = validCategories;
+                    ViewBag.Tags = _eventService.UniqueTags.ToList();
+                    return View(model);
+                }
+
+                // Handle image upload
+                if (imageFile != null && imageFile.Length > 0)
+                {
+                    var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
+                    if (!Directory.Exists(uploadsFolder))
+                    {
+                        Directory.CreateDirectory(uploadsFolder);
+                    }
+
+                    var uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(imageFile.FileName);
+                    var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await imageFile.CopyToAsync(fileStream);
+                    }
+
+                    model.ImagePath = "/uploads/" + uniqueFileName;
+                }
+
+                // Parse tags
+                if (!string.IsNullOrWhiteSpace(tagsInput))
+                {
+                    model.Tags = tagsInput.Split(',')
+                        .Select(t => t.Trim())
+                        .Where(t => !string.IsNullOrWhiteSpace(t))
+                        .ToList();
+                }
+                else
+                {
+                    model.Tags = new List<string>();
+                }
+
+                // Generate new ID
+                var allEvents = _eventService.GetAllEvents();
+                model.Id = allEvents.Any() ? allEvents.Max(e => e.Id) + 1 : 1;
+
+                _eventService.AddEvent(model);
+
+                return RedirectToAction("Dashboard");
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", "An error occurred while creating the event. Please try again.");
+                ViewBag.Categories = _eventService.UniqueCategories.ToList();
+                ViewBag.Tags = _eventService.UniqueTags.ToList();
                 return View(model);
             }
-
-            // Handle image upload
-            if (imageFile != null && imageFile.Length > 0)
-            {
-                var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
-                if (!Directory.Exists(uploadsFolder))
-                {
-                    Directory.CreateDirectory(uploadsFolder);
-                }
-
-                var uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(imageFile.FileName);
-                var filePath = Path.Combine(uploadsFolder, uniqueFileName);
-
-                using (var fileStream = new FileStream(filePath, FileMode.Create))
-                {
-                    await imageFile.CopyToAsync(fileStream);
-                }
-
-                model.ImagePath = "/uploads/" + uniqueFileName;
-            }
-
-            // Parse tags
-            if (!string.IsNullOrWhiteSpace(tagsInput))
-            {
-                model.Tags = tagsInput.Split(',')
-                    .Select(t => t.Trim())
-                    .Where(t => !string.IsNullOrWhiteSpace(t))
-                    .ToList();
-            }
-            else
-            {
-                model.Tags = new List<string>();
-            }
-
-            // Generate new ID
-            var allEvents = _eventService.GetAllEvents();
-            model.Id = allEvents.Any() ? allEvents.Max(e => e.Id) + 1 : 1;
-
-            _eventService.AddEvent(model);
-
-            return RedirectToAction("Dashboard");
         }
 
         // POST: Admin/EditEvent
@@ -149,32 +175,60 @@ namespace Programming_7312_Part_1.Controllers
                 return RedirectToAction("Login");
             }
 
-            if (!ModelState.IsValid)
+            try
             {
+                // Validate category
+                var validCategories = _eventService.UniqueCategories.ToList();
+                if (!validCategories.Contains(model.Category))
+                {
+                    ModelState.AddModelError("Category", "Please select a valid category from the dropdown.");
+                    ViewBag.Categories = validCategories;
+                    ViewBag.Tags = _eventService.UniqueTags.ToList();
+                    ViewBag.TagsInput = string.Join(", ", model.Tags ?? new List<string>());
+                    return View(model);
+                }
+
+                if (!ModelState.IsValid)
+                {
+                    ViewBag.Categories = validCategories;
+                    ViewBag.Tags = _eventService.UniqueTags.ToList();
+                    ViewBag.TagsInput = string.Join(", ", model.Tags ?? new List<string>());
+                    return View(model);
+                }
+
+                // Parse tags
+                if (!string.IsNullOrWhiteSpace(tagsInput))
+                {
+                    model.Tags = tagsInput.Split(',')
+                        .Select(t => t.Trim())
+                        .Where(t => !string.IsNullOrWhiteSpace(t))
+                        .ToList();
+                }
+                else
+                {
+                    model.Tags = new List<string>();
+                }
+
+                var success = _eventService.UpdateEvent(model);
+                if (!success)
+                {
+                    ModelState.AddModelError("", "Failed to update event.");
+                    ViewBag.Categories = validCategories;
+                    ViewBag.Tags = _eventService.UniqueTags.ToList();
+                    ViewBag.TagsInput = string.Join(", ", model.Tags ?? new List<string>());
+                    return View(model);
+                }
+
+                return RedirectToAction("Dashboard");
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", "An error occurred while updating the event. Please try again.");
+                ViewBag.Categories = _eventService.UniqueCategories.ToList();
+                ViewBag.Tags = _eventService.UniqueTags.ToList();
+                ViewBag.TagsInput = string.Join(", ", model.Tags ?? new List<string>());
                 return View(model);
             }
-
-            // Parse tags
-            if (!string.IsNullOrWhiteSpace(tagsInput))
-            {
-                model.Tags = tagsInput.Split(',')
-                    .Select(t => t.Trim())
-                    .Where(t => !string.IsNullOrWhiteSpace(t))
-                    .ToList();
-            }
-            else
-            {
-                model.Tags = new List<string>();
-            }
-
-            var success = _eventService.UpdateEvent(model);
-            if (!success)
-            {
-                ModelState.AddModelError("", "Failed to update event.");
-                return View(model);
-            }
-
-            return RedirectToAction("Dashboard");
         }
 
         // POST: Admin/Logout
