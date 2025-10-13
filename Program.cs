@@ -17,6 +17,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddSingleton<IssueStorage>();
 builder.Services.AddScoped<EventService>();
 builder.Services.AddScoped<AnnouncementService>();
+builder.Services.AddScoped<ContactService>();
+builder.Services.AddScoped<EmailService>();
 
 var app = builder.Build();
 

@@ -12,12 +12,16 @@ namespace Programming_7312_Part_1.Controllers
         private readonly IssueStorage _issueStorage;
         private readonly EventService _eventService;
         private readonly AnnouncementService _announcementService;
+        private readonly ContactService _contactService;
+        private readonly EmailService _emailService;
 
-        public HomeController(IssueStorage issueStorage, EventService eventService, AnnouncementService announcementService)
+        public HomeController(IssueStorage issueStorage, EventService eventService, AnnouncementService announcementService, ContactService contactService, EmailService emailService)
         {
             _issueStorage = issueStorage ?? throw new ArgumentNullException(nameof(issueStorage));
             _eventService = eventService ?? throw new ArgumentNullException(nameof(eventService));
             _announcementService = announcementService ?? throw new ArgumentNullException(nameof(announcementService));
+            _contactService = contactService ?? throw new ArgumentNullException(nameof(contactService));
+            _emailService = emailService ?? throw new ArgumentNullException(nameof(emailService));
         }
 
         // home  
@@ -205,6 +209,35 @@ namespace Programming_7312_Part_1.Controllers
                 return Json(new { success = true, upvotes = issue.Upvotes });
             }
             return Json(new { success = false });
+        }
+
+        public IActionResult Contact()
+        {
+            ViewBag.Categories = new[] { "General Inquiry", "Technical Support", "Feedback", "Complaint", "Other" };
+            return View(new Contact());
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Contact(Contact model)
+        {
+            ViewBag.Categories = new[] { "General Inquiry", "Technical Support", "Feedback", "Complaint", "Other" };
+
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            // Store contact message
+            _contactService.AddContact(model);
+
+            // Send confirmation email
+            await _emailService.SendContactConfirmationAsync(model.Email, model.Name, model.Subject, model.Message);
+
+            ViewBag.SuccessMessage = "Your message has been sent successfully! A confirmation email has been sent to your email address.";
+            ViewBag.EngagementMessage = "Thank you for contacting us.";
+
+            ModelState.Clear();
+            return View(new Contact());
         }
 
         public IActionResult Error()

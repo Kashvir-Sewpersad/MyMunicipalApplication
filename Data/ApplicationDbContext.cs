@@ -12,6 +12,7 @@ namespace Programming_7312_Part_1.Data
 
         public DbSet<Event> Events { get; set; }
         public DbSet<Announcement> Announcements { get; set; }
+        public DbSet<Contact> Contacts { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -49,6 +50,21 @@ namespace Programming_7312_Part_1.Data
                 entity.Property(a => a.IsActive).HasDefaultValue(true);
                 entity.Property(a => a.Priority).HasDefaultValue(1);
                 entity.Property(a => a.CreatedDate).HasDefaultValueSql("datetime('now')");
+            });
+
+            // Configure Contact entity
+            modelBuilder.Entity<Contact>(entity =>
+            {
+                entity.HasKey(c => c.Id);
+                entity.Property(c => c.Name).IsRequired().HasMaxLength(100);
+                entity.Property(c => c.Email).IsRequired().HasMaxLength(200);
+                entity.Property(c => c.Subject).IsRequired().HasMaxLength(500);
+                entity.Property(c => c.Message).IsRequired().HasMaxLength(2000);
+                entity.Property(c => c.Phone).HasMaxLength(20);
+                entity.Property(c => c.Category).HasMaxLength(100);
+                entity.Property(c => c.IsRead).HasDefaultValue(false);
+                entity.Property(c => c.IsResponded).HasDefaultValue(false);
+                entity.Property(c => c.CreatedDate).HasDefaultValueSql("datetime('now')");
             });
         }
     }
