@@ -4,6 +4,7 @@ using Programming_7312_Part_1.Models;
 using Programming_7312_Part_1.Services;
 using System.IO;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Programming_7312_Part_1.Controllers
 {
@@ -100,7 +101,7 @@ namespace Programming_7312_Part_1.Controllers
             ViewBag.StartDate = startDate;
             ViewBag.EndDate = endDate;
 
-            List<Event> events;
+            IEnumerable<Event> events;
 
             if (!string.IsNullOrEmpty(category))
             {
@@ -143,7 +144,7 @@ namespace Programming_7312_Part_1.Controllers
                 // Also filter the section events by date
                 if (ViewBag.UpcomingEvents != null)
                 {
-                    ViewBag.UpcomingEvents = ((List<Event>)ViewBag.UpcomingEvents).Where(e =>
+                    ViewBag.UpcomingEvents = ((IEnumerable<Event>)ViewBag.UpcomingEvents).Where(e =>
                     {
                         bool matchesStart = !startDate.HasValue || e.EventDate.Date >= startDate.Value.Date;
                         bool matchesEnd = !endDate.HasValue || e.EventDate.Date <= endDate.Value.Date;
@@ -153,7 +154,7 @@ namespace Programming_7312_Part_1.Controllers
 
                 if (ViewBag.FeaturedEvents != null)
                 {
-                    ViewBag.FeaturedEvents = ((List<Event>)ViewBag.FeaturedEvents).Where(e =>
+                    ViewBag.FeaturedEvents = ((IEnumerable<Event>)ViewBag.FeaturedEvents).Where(e =>
                     {
                         bool matchesStart = !startDate.HasValue || e.EventDate.Date >= startDate.Value.Date;
                         bool matchesEnd = !endDate.HasValue || e.EventDate.Date <= endDate.Value.Date;
@@ -163,7 +164,7 @@ namespace Programming_7312_Part_1.Controllers
 
                 if (ViewBag.RecommendedEvents != null)
                 {
-                    ViewBag.RecommendedEvents = ((List<Event>)ViewBag.RecommendedEvents).Where(e =>
+                    ViewBag.RecommendedEvents = ((IEnumerable<Event>)ViewBag.RecommendedEvents).Where(e =>
                     {
                         bool matchesStart = !startDate.HasValue || e.EventDate.Date >= startDate.Value.Date;
                         bool matchesEnd = !endDate.HasValue || e.EventDate.Date <= endDate.Value.Date;
@@ -172,7 +173,7 @@ namespace Programming_7312_Part_1.Controllers
                 }
             }
 
-            return View(events);
+            return View(events.ToList());
         }
 
         [HttpPost]

@@ -15,7 +15,7 @@ namespace Programming_7312_Part_1.Services
         public SortedDictionary<DateTime, HashSet<Event>> EventsByDate { get; } = new SortedDictionary<DateTime, HashSet<Event>>();
 
         // Dictionary for organizing events by category
-        public Dictionary<string, List<Event>> EventsByCategory { get; } = new Dictionary<string, List<Event>>();
+        public Dictionary<string, LinkedList<Event>> EventsByCategory { get; } = new Dictionary<string, LinkedList<Event>>();
 
         // HashSet for unique categories
         public HashSet<string> UniqueCategories { get; } = new HashSet<string>();
@@ -159,9 +159,9 @@ namespace Programming_7312_Part_1.Services
             // Add to EventsByCategory
             if (!EventsByCategory.ContainsKey(eventItem.Category))
             {
-                EventsByCategory[eventItem.Category] = new List<Event>();
+                EventsByCategory[eventItem.Category] = new LinkedList<Event>();
             }
-            EventsByCategory[eventItem.Category].Add(eventItem);
+            EventsByCategory[eventItem.Category].AddLast(eventItem);
 
             // Add to UniqueCategories
             UniqueCategories.Add(eventItem.Category);
@@ -203,9 +203,9 @@ namespace Programming_7312_Part_1.Services
             UpcomingEvents[eventItem.EventDate].Add(eventItem);
         }
 
-        public List<Event> GetAllEvents()
+        public LinkedList<Event> GetAllEvents()
         {
-            return _context.Events.OrderBy(e => e.EventDate).ToList();
+            return new LinkedList<Event>(_context.Events.OrderBy(e => e.EventDate));
         }
 
         public List<Event> GetEventsByCategory(string category)
@@ -217,39 +217,41 @@ namespace Programming_7312_Part_1.Services
             return new List<Event>();
         }
 
-        public List<Event> GetEventsByDateRange(DateTime startDate, DateTime endDate)
+        public LinkedList<Event> GetEventsByDateRange(DateTime startDate, DateTime endDate)
         {
-            var result = new List<Event>();
+            var result = new LinkedList<Event>();
 
             foreach (var dateKey in EventsByDate.Keys)
             {
                 if (dateKey >= startDate.Date && dateKey <= endDate.Date)
                 {
-                    result.AddRange(EventsByDate[dateKey]);
+                    foreach (var eventItem in EventsByDate[dateKey])
+                    {
+                        result.AddLast(eventItem);
+                    }
                 }
             }
 
-            return result.OrderBy(e => e.EventDate).ToList();
+            return new LinkedList<Event>(result.OrderBy(e => e.EventDate));
         }
 
-        public List<Event> GetUpcomingEvents(int count = 5)
+        public LinkedList<Event> GetUpcomingEvents(int count = 5)
         {
-            return UpcomingEvents
+            return new LinkedList<Event>(UpcomingEvents
                 .Where(kv => kv.Key >= DateTime.Now)
                 .SelectMany(kv => kv.Value)
                 .OrderBy(e => e.EventDate)
-                .Take(count)
-                .ToList();
+                .Take(count));
         }
 
-        public List<Event> GetRecentEvents(int count = 3)
+        public LinkedList<Event> GetRecentEvents(int count = 3)
         {
-            return RecentEvents.Reverse().Take(count).ToList();
+            return new LinkedList<Event>(RecentEvents.Reverse().Take(count));
         }
 
-        public List<Event> GetFeaturedEvents(int count = 3)
+        public LinkedList<Event> GetFeaturedEvents(int count = 3)
         {
-            return FeaturedEvents.Take(count).ToList();
+            return new LinkedList<Event>(FeaturedEvents.Take(count));
         }
 
         public void RecordSearch(string searchTerm)
@@ -268,7 +270,7 @@ namespace Programming_7312_Part_1.Services
             }
         }
 
-        public List<Event> SearchEvents(string searchTerm)
+        public LinkedList<Event> SearchEvents(string searchTerm)
         {
             if (string.IsNullOrWhiteSpace(searchTerm))
                 return GetAllEvents();
@@ -277,11 +279,10 @@ namespace Programming_7312_Part_1.Services
 
             searchTerm = searchTerm.ToLower().Trim();
 
-            return _context.Events
+            return new LinkedList<Event>(_context.Events
                 .AsEnumerable()
                 .Where(e => e.Title.ToLower().Contains(searchTerm))
-                .OrderBy(e => e.EventDate)
-                .ToList();
+                .OrderBy(e => e.EventDate));
         }
 
         public bool UpdateEvent(Event updatedEvent)
@@ -321,7 +322,17 @@ namespace Programming_7312_Part_1.Services
                 // Remove from old category
                 if (EventsByCategory.ContainsKey(oldCategory))
                 {
-                    EventsByCategory[oldCategory].RemoveAll(e => e.Id == updatedEvent.Id);
+                    var node = EventsByCategory[oldCategory].First;
+                    while (node != null)
+                    {
+                        var next = node.Next;
+                        if (node.Value.Id == updatedEvent.Id)
+                        {
+                            EventsByCategory[oldCategory].Remove(node);
+                            break;
+                        }
+                        node = next;
+                    }
                     if (EventsByCategory[oldCategory].Count == 0)
                     {
                         EventsByCategory.Remove(oldCategory);
@@ -332,9 +343,9 @@ namespace Programming_7312_Part_1.Services
                 // Add to new category
                 if (!EventsByCategory.ContainsKey(updatedEvent.Category))
                 {
-                    EventsByCategory[updatedEvent.Category] = new List<Event>();
+                    EventsByCategory[updatedEvent.Category] = new LinkedList<Event>();
                 }
-                EventsByCategory[updatedEvent.Category].Add(updatedEvent);
+                EventsByCategory[updatedEvent.Category].AddLast(updatedEvent);
 
                 // Update UniqueCategories
                 UniqueCategories.Add(updatedEvent.Category);
@@ -417,10 +428,10 @@ namespace Programming_7312_Part_1.Services
             return false;
         }
 
-        public List<Event> GetRecommendedEvents(int count = 3)
+        public LinkedList<Event> GetRecommendedEvents(int count = 3)
         {
             // Recommendation based on upvotes and search history
-            var recommendedEvents = new List<Event>();
+            var recommendedEvents = new LinkedList<Event>();
 
             // First, prioritize events with high upvotes
             var highVotedEvents = _context.Events
@@ -430,7 +441,10 @@ namespace Programming_7312_Part_1.Services
                 .Take(count)
                 .ToList();
 
-            recommendedEvents.AddRange(highVotedEvents);
+            foreach (var eventItem in highVotedEvents)
+            {
+                recommendedEvents.AddLast(eventItem);
+            }
 
             // If we need more, use search history
             if (recommendedEvents.Count < count && SearchHistory.Count > 0)
@@ -460,7 +474,7 @@ namespace Programming_7312_Part_1.Services
 
                     foreach (var eventItem in events)
                     {
-                        recommendedEvents.Add(eventItem);
+                        recommendedEvents.AddLast(eventItem);
                         usedEventIds.Add(eventItem.Id);
 
                         if (recommendedEvents.Count >= count)
@@ -480,39 +494,40 @@ namespace Programming_7312_Part_1.Services
                     .Where(e => !usedEventIds.Contains(e.Id))
                     .ToList();
 
-                recommendedEvents.AddRange(upcoming);
-            } 
+                foreach (var eventItem in upcoming)
+                {
+                    recommendedEvents.AddLast(eventItem);
+                }
+            }
 
-            return recommendedEvents.Take(count).ToList();
+            return new LinkedList<Event>(recommendedEvents.Take(count));
         }
 
-        public List<Event> GetUpcomingEventsByCategory(string category, int count = 5)
+        public LinkedList<Event> GetUpcomingEventsByCategory(string category, int count = 5)
         {
-            return UpcomingEvents
+            return new LinkedList<Event>(UpcomingEvents
                 .Where(kv => kv.Key >= DateTime.Now)
                 .SelectMany(kv => kv.Value)
                 .Where(e => e.Category.Equals(category, StringComparison.OrdinalIgnoreCase))
-                .Take(count)
-                .ToList();
+                .Take(count));
         }
 
-        public List<Event> GetFeaturedEventsByCategory(string category, int count = 3)
+        public LinkedList<Event> GetFeaturedEventsByCategory(string category, int count = 3)
         {
-            return FeaturedEvents
+            return new LinkedList<Event>(FeaturedEvents
                 .Where(e => e.Category.Equals(category, StringComparison.OrdinalIgnoreCase))
-                .Take(count)
-                .ToList();
+                .Take(count));
         }
 
-        public List<Event> GetRecommendedEventsByCategory(string category, int count = 3)
+        public LinkedList<Event> GetRecommendedEventsByCategory(string category, int count = 3)
         {
             if (string.IsNullOrEmpty(category))
             {
-                return new List<Event>();
+                return new LinkedList<Event>();
             }
 
             // Recommendation based on upvotes and search history, filtered by category
-            var recommendedEvents = new List<Event>();
+            var recommendedEvents = new LinkedList<Event>();
 
             // First, prioritize events with high upvotes in this category
             var highVotedEvents = _context.Events
@@ -522,7 +537,10 @@ namespace Programming_7312_Part_1.Services
                 .Take(count)
                 .ToList();
 
-            recommendedEvents.AddRange(highVotedEvents);
+            foreach (var eventItem in highVotedEvents)
+            {
+                recommendedEvents.AddLast(eventItem);
+            }
 
             // If we need more, use search history
             if (recommendedEvents.Count < count && SearchHistory.Count > 0)
@@ -553,7 +571,7 @@ namespace Programming_7312_Part_1.Services
 
                     foreach (var eventItem in events)
                     {
-                        recommendedEvents.Add(eventItem);
+                        recommendedEvents.AddLast(eventItem);
                         usedEventIds.Add(eventItem.Id);
 
                         if (recommendedEvents.Count >= count)
@@ -573,10 +591,13 @@ namespace Programming_7312_Part_1.Services
                     .Where(e => !usedEventIds.Contains(e.Id))
                     .ToList();
 
-                recommendedEvents.AddRange(upcoming);
+                foreach (var eventItem in upcoming)
+                {
+                    recommendedEvents.AddLast(eventItem);
+                }
             }
 
-            return recommendedEvents.Take(count).ToList();
+            return new LinkedList<Event>(recommendedEvents.Take(count));
         }
 
         public bool DeleteEvent(int id)
@@ -617,7 +638,17 @@ namespace Programming_7312_Part_1.Services
             // Remove from EventsByCategory
             if (EventsByCategory.ContainsKey(oldCategory))
             {
-                EventsByCategory[oldCategory].RemoveAll(e => e.Id == eventItem.Id);
+                var node = EventsByCategory[oldCategory].First;
+                while (node != null)
+                {
+                    var next = node.Next;
+                    if (node.Value.Id == eventItem.Id)
+                    {
+                        EventsByCategory[oldCategory].Remove(node);
+                        break;
+                    }
+                    node = next;
+                }
                 if (EventsByCategory[oldCategory].Count == 0)
                 {
                     EventsByCategory.Remove(oldCategory);
