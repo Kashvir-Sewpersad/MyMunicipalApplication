@@ -1,3 +1,8 @@
+
+//***************************************************************** Start Of file ****************************************************//
+
+//------------------------- start of imports -------------------------//
+
 using Microsoft.AspNetCore.Mvc;
 using Programming_7312_Part_1.Models;
 using Programming_7312_Part_1.Services;
@@ -7,6 +12,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
 
+//----------------------- end of imports -----------------------------//
 namespace Programming_7312_Part_1.Controllers
 {
     public class AdminController : Controller
@@ -35,19 +41,19 @@ namespace Programming_7312_Part_1.Controllers
             // Hash table for admin credentials
             var adminCredentials = new Dictionary<string, string>
             {
-                { "password", "1234" }
+                { "password", "1234" } // hard coded password for simple login. 
             };
 
             if (adminCredentials.ContainsValue(password))
             {
                 // Simple session-based auth
                 HttpContext.Session.SetString("AdminLoggedIn", "true");
-                return RedirectToAction("Dashboard");
+                return RedirectToAction("Dashboard"); // opens admin dash 
             }
             else
             {
-                ViewBag.Error = "Invalid password.";
-                return View();
+                ViewBag.Error = "Invalid password."; // error message 
+                return View(); // returns back to login 
             }
         }
 
@@ -60,9 +66,9 @@ namespace Programming_7312_Part_1.Controllers
             }
 
             ViewBag.Issues = _issueStorage.ReportedIssues.ToList();
-            ViewBag.Events = _eventService.GetAllEvents();
-            ViewBag.Announcements = _announcementService.GetAllAnnouncements();
-            return View();
+            ViewBag.Events = _eventService.GetAllEvents(); // opens up the events 
+            ViewBag.Announcements = _announcementService.GetAllAnnouncements(); // opens up all stored announcements 
+            return View(); // displays on the admin view 
         }
 
         // GET: Admin/EditEvent
@@ -99,8 +105,12 @@ namespace Programming_7312_Part_1.Controllers
         }
 
         // POST: Admin/CreateEvent
+        /*
+         *the below method is used to cpature the process of creaing an event 
+         * 
+         */
         [HttpPost]
-        public async Task<IActionResult> CreateEvent(Event model, string tagsInput, IFormFile imageFile)
+        public async Task<IActionResult> CreateEvent(Event model, string tagsInput, IFormFile imageFile) // fields 
         {
             if (HttpContext.Session.GetString("AdminLoggedIn") != "true")
             {
@@ -113,26 +123,26 @@ namespace Programming_7312_Part_1.Controllers
                 var validCategories = _eventService.UniqueCategories.ToList();
                 if (!validCategories.Contains(model.Category))
                 {
-                    ModelState.AddModelError("Category", "Please select a valid category from the dropdown.");
+                    ModelState.AddModelError("Category", "Please select a valid category from the dropdown."); // error message  
                     ViewBag.Categories = validCategories;
                     ViewBag.Tags = _eventService.UniqueTags.ToList();
                     return View(model);
                 }
 
-                if (!ModelState.IsValid)
+                if (!ModelState.IsValid) // error if not valid 
                 {
                     ViewBag.Categories = validCategories;
                     ViewBag.Tags = _eventService.UniqueTags.ToList();
-                    return View(model);
+                    return View(model); // return model 
                 }
 
                 // Handle image upload
                 if (imageFile != null && imageFile.Length > 0)
                 {
-                    var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
+                    var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads"); // image path is in  the root images folder 
                     if (!Directory.Exists(uploadsFolder))
                     {
-                        Directory.CreateDirectory(uploadsFolder);
+                        Directory.CreateDirectory(uploadsFolder); // locatoion 
                     }
 
                     var uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(imageFile.FileName);
@@ -161,15 +171,16 @@ namespace Programming_7312_Part_1.Controllers
 
                 // Generate new ID
                 var allEvents = _eventService.GetAllEvents();
-                model.Id = allEvents.Any() ? allEvents.Max(e => e.Id) + 1 : 1;
+                model.Id = allEvents.Any() ? allEvents.Max(e => e.Id) + 1 : 1; // previous id + 1 
 
-                _eventService.AddEvent(model);
+                _eventService.AddEvent(model); // added to the model  
 
-                return RedirectToAction("Dashboard");
+                return RedirectToAction("Dashboard"); // takes the admin back to the dash 
             }
+            // exception handling added  
             catch (Exception ex)
             {
-                ModelState.AddModelError("", "An error occurred while creating the event. Please try again.");
+                ModelState.AddModelError("", "An error occurred while creating the event. Please try again."); // error message 
                 ViewBag.Categories = _eventService.UniqueCategories.ToList();
                 ViewBag.Tags = _eventService.UniqueTags.ToList();
                 return View(model);
@@ -191,11 +202,11 @@ namespace Programming_7312_Part_1.Controllers
                 var validCategories = _eventService.UniqueCategories.ToList();
                 if (!validCategories.Contains(model.Category))
                 {
-                    ModelState.AddModelError("Category", "Please select a valid category from the dropdown.");
+                    ModelState.AddModelError("Category", "Please select a valid category from the dropdown."); // error message 
                     ViewBag.Categories = validCategories;
                     ViewBag.Tags = _eventService.UniqueTags.ToList();
                     ViewBag.TagsInput = string.Join(", ", model.Tags ?? new List<string>());
-                    return View(model);
+                    return View(model); // retuen 
                 }
 
                 if (!ModelState.IsValid)
@@ -242,6 +253,11 @@ namespace Programming_7312_Part_1.Controllers
         }
 
         // POST: Admin/DeleteEvent
+        /*
+         * the below method is to capture and update the functionality for deleting an event 
+         *
+         * 
+         */
         [HttpPost]
         public IActionResult DeleteEvent(int id)
         {
@@ -253,17 +269,24 @@ namespace Programming_7312_Part_1.Controllers
             var success = _eventService.DeleteEvent(id);
             if (!success)
             {
-                TempData["Error"] = "Failed to delete event.";
+                TempData["Error"] = "Failed to delete event."; // error message 
             }
             else
             {
-                TempData["Success"] = "Event deleted successfully.";
+                TempData["Success"] = "Event deleted successfully."; // sucess message 
             }
 
-            return RedirectToAction("Dashboard");
+            return RedirectToAction("Dashboard"); // back to dash 
         }
 
         // GET: Admin/CreateAnnouncement
+        
+        /*
+         *
+         * the below method contains the functionaity for capturing and storing the new announcements added by the admin staff 
+         *
+         * 
+         */
         public IActionResult CreateAnnouncement()
         {
             if (HttpContext.Session.GetString("AdminLoggedIn") != "true")
@@ -302,13 +325,21 @@ namespace Programming_7312_Part_1.Controllers
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("", "An error occurred while creating the announcement. Please try again.");
+                ModelState.AddModelError("", "An error occurred while creating the announcement. Please try again."); // error message 
                 ViewBag.Categories = _announcementService.UniqueCategories.ToList();
-                return View(model);
+                return View(model); // return 
             }
         }
 
-        // POST: Admin/DeleteAnnouncement
+        // POST: Admin/DeleteAnnouncementfunctionality to delete and capture the change for deleting an announcement 
+        
+        /*
+         *
+         *
+         * the below method contains the 
+         *
+         * 
+         */
         [HttpPost]
         public IActionResult DeleteAnnouncement(int id)
         {
@@ -329,13 +360,25 @@ namespace Programming_7312_Part_1.Controllers
 
             return RedirectToAction("Dashboard");
         }
-
+        
         // POST: Admin/Logout
+        
+        /*
+         *
+         * the below method contains the functionality for logging and admin out
+         *
+         * this comes in the form of a simple session end
+         *
+         * it is not the safest but works 
+         *
+         * 
+         */
         [HttpPost]
         public IActionResult Logout()
         {
             HttpContext.Session.Remove("AdminLoggedIn");
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Home"); //  admin is directed back to home page 
         }
     }
 }
+//***************************************************************** End Of file ****************************************************//
