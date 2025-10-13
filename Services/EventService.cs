@@ -30,7 +30,7 @@ namespace Programming_7312_Part_1.Services
         public Stack<Event> FeaturedEvents { get; } = new Stack<Event>();
 
         // Priority queue for upcoming events (prioritized by date)
-        public SortedDictionary<DateTime, Event> UpcomingEvents { get; } = new SortedDictionary<DateTime, Event>();
+        public SortedDictionary<DateTime, List<Event>> UpcomingEvents { get; } = new SortedDictionary<DateTime, List<Event>>();
 
         // Dictionary for user search history
         public Dictionary<string, int> SearchHistory { get; } = new Dictionary<string, int>();
@@ -186,11 +186,21 @@ namespace Programming_7312_Part_1.Services
             FeaturedEvents.Push(eventItem);
             if (FeaturedEvents.Count > 3)
             {
-                FeaturedEvents.Pop();
+                var list = FeaturedEvents.ToList();
+                list.RemoveAt(list.Count - 1); // remove bottom of stack
+                FeaturedEvents.Clear();
+                foreach(var item in list.AsEnumerable().Reverse())
+                {
+                    FeaturedEvents.Push(item);
+                }
             }
 
             // Add to UpcomingEvents
-            UpcomingEvents[eventItem.EventDate] = eventItem;
+            if (!UpcomingEvents.ContainsKey(eventItem.EventDate))
+            {
+                UpcomingEvents[eventItem.EventDate] = new List<Event>();
+            }
+            UpcomingEvents[eventItem.EventDate].Add(eventItem);
         }
 
         public List<Event> GetAllEvents()
@@ -226,8 +236,9 @@ namespace Programming_7312_Part_1.Services
         {
             return UpcomingEvents
                 .Where(kv => kv.Key >= DateTime.Now)
+                .SelectMany(kv => kv.Value)
+                .OrderBy(e => e.EventDate)
                 .Take(count)
-                .Select(kv => kv.Value)
                 .ToList();
         }
 
@@ -268,12 +279,7 @@ namespace Programming_7312_Part_1.Services
 
             return _context.Events
                 .AsEnumerable()
-                .Where(e =>
-                    e.Title.ToLower().Contains(searchTerm) ||
-                    e.Description.ToLower().Contains(searchTerm) ||
-                    e.Category.ToLower().Contains(searchTerm) ||
-                    e.Location.ToLower().Contains(searchTerm) ||
-                    (e.Tags != null && e.Tags.IndexOf(searchTerm.ToLower()) >= 0))
+                .Where(e => e.Title.ToLower().Contains(searchTerm))
                 .OrderBy(e => e.EventDate)
                 .ToList();
         }
@@ -287,7 +293,7 @@ namespace Programming_7312_Part_1.Services
             }
 
             // Store old values for cleanup
-            var oldDateKey = existingEvent.EventDate.Date;
+            var oldEventDate = existingEvent.EventDate;
             var oldCategory = existingEvent.Category;
 
             // Update properties
@@ -302,12 +308,12 @@ namespace Programming_7312_Part_1.Services
             _context.SaveChanges();
 
             // Update data structures
-            UpdateEventInDataStructures(existingEvent, oldDateKey, oldCategory);
+            UpdateEventInDataStructures(existingEvent, oldEventDate, oldCategory);
 
             return true;
         }
 
-        private void UpdateEventInDataStructures(Event updatedEvent, DateTime oldDateKey, string oldCategory)
+        private void UpdateEventInDataStructures(Event updatedEvent, DateTime oldEventDate, string oldCategory)
         {
             // If category changed, update EventsByCategory
             if (oldCategory != updatedEvent.Category)
@@ -319,6 +325,7 @@ namespace Programming_7312_Part_1.Services
                     if (EventsByCategory[oldCategory].Count == 0)
                     {
                         EventsByCategory.Remove(oldCategory);
+                        UniqueCategories.Remove(oldCategory);
                     }
                 }
 
@@ -330,7 +337,6 @@ namespace Programming_7312_Part_1.Services
                 EventsByCategory[updatedEvent.Category].Add(updatedEvent);
 
                 // Update UniqueCategories
-                UniqueCategories.Remove(oldCategory);
                 UniqueCategories.Add(updatedEvent.Category);
 
                 // Update UniqueTags
@@ -345,6 +351,7 @@ namespace Programming_7312_Part_1.Services
 
             // If date changed, update EventsByDate
             var newDateKey = updatedEvent.EventDate.Date;
+            var oldDateKey = oldEventDate.Date;
             if (oldDateKey != newDateKey)
             {
                 // Remove from old date
@@ -366,8 +373,19 @@ namespace Programming_7312_Part_1.Services
             }
 
             // Update UpcomingEvents
-            UpcomingEvents.Remove(oldDateKey);
-            UpcomingEvents[updatedEvent.EventDate] = updatedEvent;
+            if (UpcomingEvents.ContainsKey(oldEventDate))
+            {
+                UpcomingEvents[oldEventDate].RemoveAll(e => e.Id == updatedEvent.Id);
+                if (UpcomingEvents[oldEventDate].Count == 0)
+                {
+                    UpcomingEvents.Remove(oldEventDate);
+                }
+            }
+            if (!UpcomingEvents.ContainsKey(updatedEvent.EventDate))
+            {
+                UpcomingEvents[updatedEvent.EventDate] = new List<Event>();
+            }
+            UpcomingEvents[updatedEvent.EventDate].Add(updatedEvent);
         }
 
         public Event GetEventById(int id)
@@ -463,7 +481,7 @@ namespace Programming_7312_Part_1.Services
                     .ToList();
 
                 recommendedEvents.AddRange(upcoming);
-            }
+            } 
 
             return recommendedEvents.Take(count).ToList();
         }
@@ -471,9 +489,10 @@ namespace Programming_7312_Part_1.Services
         public List<Event> GetUpcomingEventsByCategory(string category, int count = 5)
         {
             return UpcomingEvents
-                .Where(kv => kv.Key >= DateTime.Now && kv.Value.Category.Equals(category, StringComparison.OrdinalIgnoreCase))
+                .Where(kv => kv.Key >= DateTime.Now)
+                .SelectMany(kv => kv.Value)
+                .Where(e => e.Category.Equals(category, StringComparison.OrdinalIgnoreCase))
                 .Take(count)
-                .Select(kv => kv.Value)
                 .ToList();
         }
 
@@ -569,7 +588,7 @@ namespace Programming_7312_Part_1.Services
             }
 
             // Store old values for cleanup
-            var oldDateKey = eventItem.EventDate.Date;
+            var oldEventDate = eventItem.EventDate;
             var oldCategory = eventItem.Category;
 
             // Remove from database
@@ -577,14 +596,15 @@ namespace Programming_7312_Part_1.Services
             _context.SaveChanges();
 
             // Update data structures
-            RemoveEventFromDataStructures(eventItem, oldDateKey, oldCategory);
+            RemoveEventFromDataStructures(eventItem, oldEventDate, oldCategory);
 
             return true;
         }
 
-        private void RemoveEventFromDataStructures(Event eventItem, DateTime oldDateKey, string oldCategory)
+        private void RemoveEventFromDataStructures(Event eventItem, DateTime oldEventDate, string oldCategory)
         {
             // Remove from EventsByDate
+            var oldDateKey = oldEventDate.Date;
             if (EventsByDate.ContainsKey(oldDateKey))
             {
                 EventsByDate[oldDateKey].RemoveAll(e => e.Id == eventItem.Id);
@@ -601,14 +621,12 @@ namespace Programming_7312_Part_1.Services
                 if (EventsByCategory[oldCategory].Count == 0)
                 {
                     EventsByCategory.Remove(oldCategory);
-                    // Note: UniqueCategories is a HashSet, so removing the category if no events left
-                    // But since it's a set of all categories, we might not remove it if other events exist, but for simplicity, we'll leave it
+                    UniqueCategories.Remove(oldCategory);
                 }
             }
 
             // Remove from RecentEvents (Queue)
-            var recentList = RecentEvents.ToList();
-            recentList.RemoveAll(e => e.Id == eventItem.Id);
+            var recentList = RecentEvents.Where(e => e.Id != eventItem.Id).ToList();
             RecentEvents.Clear();
             foreach (var e in recentList)
             {
@@ -616,16 +634,22 @@ namespace Programming_7312_Part_1.Services
             }
 
             // Remove from FeaturedEvents (Stack)
-            var featuredList = FeaturedEvents.ToList();
-            featuredList.RemoveAll(e => e.Id == eventItem.Id);
+            var featuredList = FeaturedEvents.Where(e => e.Id != eventItem.Id).ToList();
             FeaturedEvents.Clear();
-            foreach (var e in featuredList)
+            foreach (var e in featuredList.AsEnumerable().Reverse())
             {
                 FeaturedEvents.Push(e);
             }
 
             // Remove from UpcomingEvents
-            UpcomingEvents.Remove(eventItem.EventDate);
+            if (UpcomingEvents.ContainsKey(oldEventDate))
+            {
+                UpcomingEvents[oldEventDate].RemoveAll(e => e.Id == eventItem.Id);
+                if (UpcomingEvents[oldEventDate].Count == 0)
+                {
+                    UpcomingEvents.Remove(oldEventDate);
+                }
+            }
         }
     }
 }
