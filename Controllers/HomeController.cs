@@ -1,10 +1,15 @@
-// Controllers/HomeController.cs
+
+//************************************************** start of file ************************************************//
+
+//------------------------------ start of imports ---------------------//
 using Microsoft.AspNetCore.Mvc;
 using Programming_7312_Part_1.Models;
 using Programming_7312_Part_1.Services;
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
+
+//----------------------------- end of imports ------------------------//
 
 namespace Programming_7312_Part_1.Controllers
 {
@@ -25,13 +30,13 @@ namespace Programming_7312_Part_1.Controllers
             _emailService = emailService ?? throw new ArgumentNullException(nameof(emailService));
         }
 
-        // home  
+        // home  page 
         public IActionResult Index()
         {
             return View();
         }
 
-        // privacy 
+        // privacy page 
         public IActionResult Privacy()
         {
             return View();
@@ -40,13 +45,13 @@ namespace Programming_7312_Part_1.Controllers
         public IActionResult ReportIssues()
         {
             ViewBag.Categories = new[] { "Sanitation", "Roads", "Utilities", "Other" }; // categories 
-            return View(new Issue());
+            return View(new Issue()); // new issue 
         }
 
         [HttpPost]
         public async Task<IActionResult> ReportIssues(Issue model, IFormFile attachment)
         {
-            ViewBag.Categories = new[] { "Sanitation", "Roads", "Utilities", "Other" };
+            ViewBag.Categories = new[] { "Sanitation", "Roads", "Utilities", "Other" }; // catergories 
 
             if (!ModelState.IsValid)
             {
@@ -95,7 +100,7 @@ namespace Programming_7312_Part_1.Controllers
             // Set default start date to current date if not provided
             if (!startDate.HasValue)
             {
-                startDate = DateTime.Now.Date;
+                startDate = DateTime.Now.Date; // current date
             }
 
             ViewBag.StartDate = startDate;
@@ -188,7 +193,13 @@ namespace Programming_7312_Part_1.Controllers
 
             return View(events.ToList());
         }
-
+        /*
+         *
+         * the below method is to display the upvotes 
+         *
+         *
+         * 
+         */
         [HttpPost]
         public IActionResult UpvoteEvent(int eventId)
         {
@@ -202,7 +213,7 @@ namespace Programming_7312_Part_1.Controllers
         }
 
         [HttpPost]
-        public IActionResult DownvoteEvent(int eventId)
+        public IActionResult DownvoteEvent(int eventId) // downvotes based on id 
         {
             var success = _eventService.DownvoteEvent(eventId);
             if (success)
@@ -224,7 +235,11 @@ namespace Programming_7312_Part_1.Controllers
             }
             return Json(new { success = false });
         }
-
+        /*
+         *
+         *
+         * the below is for the contact 
+         */
         public IActionResult Contact()
         {
             ViewBag.Categories = new[] { "General Inquiry", "Technical Support", "Feedback", "Complaint", "Other" };
@@ -234,7 +249,7 @@ namespace Programming_7312_Part_1.Controllers
         [HttpPost]
         public async Task<IActionResult> Contact(Contact model)
         {
-            ViewBag.Categories = new[] { "General Inquiry", "Technical Support", "Feedback", "Complaint", "Other" };
+            ViewBag.Categories = new[] { "General Inquiry", "Technical Support", "Feedback", "Complaint", "Other" }; // options 
 
             if (!ModelState.IsValid)
             {
@@ -256,7 +271,8 @@ namespace Programming_7312_Part_1.Controllers
 
         public IActionResult Error()
         {
-            return View();
+            return View(); // return static view 
         }
     }
 }
+//************************************** end of file **********************************************************//
