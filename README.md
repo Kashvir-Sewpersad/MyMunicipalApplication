@@ -198,7 +198,35 @@ Select "Set as Startup Project"
  *  the images (not required as per poe ) displaying on local events are not static at the moment --> i tried to have it so when a user loggs into the system they can see diffrent events each time, this has colided with the recomendation and i made a mess of it
  *  the admin cannont add an event if the active box is ticked ( not required as per poe )
  *  the recomendation algorithm does not display searched event right on top of the paage, it is displaying correctly, just not at the right position on the page 
- * 
+
+   ### Data structures used in part 2 
+### EventService.cs (Services/EventService.cs)
+- **SortedDictionary<DateTime, HashSet<Event>> EventsByDate**: Organizes the events by date for  date-based lookup and range query.
+- **Dictionary<string, LinkedList<Event>> EventsByCategory**: Group events by category using linked lists for ordered storage within category.
+- **HashSet<string> UniqueCategories**: Stores unique category names for dropdowns.
+- **HashSet<string> UniqueTags**: Stores unique tag names for event tagging and suggestion.
+- **Queue<Event> RecentEvents**: FIFO (first in first out ) queue for tracking the most recent events - limited to only 5 events .
+- **Stack<Event> FeaturedEvents**: LIFO(last in first out) stack for featured events - limited to 3.
+- **SortedDictionary<DateTime, HashSet<Event>> UpcomingEvents**: Prioritizes upcoming events by date.
+- **Dictionary<string, int> SearchHistory**: Tracks search terms and how often for recommendations.
+
+### AnnouncementService.cs (Services/AnnouncementService.cs)
+- **Queue<Announcement> AnnouncementQueue**: FIFO – first inn first out -  queue for managing announcements limited to  a maximum of 10.
+- **Dictionary<string, List<Announcement>> AnnouncementsByCategory**: Group the announcements by  their category.
+- **HashSet<string> UniqueCategories**: Stores unique announcement category names.
+- **SortedDictionary<int, List<Announcement>> AnnouncementsByPriority**: Organize  announcements by priority level - high priority first followed by medium followed by low .
+
+### IssueStorage.cs (Services/IssueStorage.cs)
+- **LinkedList<Issue> ReportedIssues**: Stores all the  report issues in a linked list for fast access and upvoting. NOTE : the upvoting of issues is not implemented yet as it was a feature I decided to add and is not required by the POE 
+
+### Models/Event.cs
+- **List<string> Tags**: Simple list for storing the many event tags.
+
+### Additional Notes
+- my  project heavily uses advanced data structures to meet the POE demands  such as queues  stacks  dictionaries of many types  hash sets and linked lists
+- SQLite is used for persistence, but in-memory data structures handle runtime operations.
+- seeded data is added for the first start up then as admin and users perform actions, that data is sent to back end and then to the SQLite
+
 
 
 
