@@ -132,7 +132,8 @@ Select "Set as Startup Project"
 
 ### This project makes use of SQlite database, the configuration is done in appsettings.json
 ### There is an automatic email responder api added to the code. the details shall removed for security reasons 
-
+### To access and use the admin dashboard, use the hardcoded password ----- > 1234
+### youtube link : https://youtu.be/7nXOtbyj1Ks
 
 
 ///////////// REFEREMCES USED FOR THIS PROJECT /////////////
@@ -171,7 +172,9 @@ Select "Set as Startup Project"
 
  * Tech With RGenics (2021). C# Dictionary with example | Dictionary in C# | C# Collection Part 6. [online] YouTube. Available at: https://www.youtube.com/watch?v=tx_JNYL0Img&list=PL_xlJum5pRdDC-SCtuLI0D_m4KJcIsCLq&index=6 [Accessed 7 Oct. 2025].
 
+ * Veed.io. (2019). Veed.io. [online] Available at: https://www.veed.io/.
 
+‌
  
 
 
