@@ -133,7 +133,7 @@ Select "Set as Startup Project"
 ### This project makes use of SQlite database, the configuration is done in appsettings.json
 ### There is an automatic email responder api added to the code. the details shall removed for security reasons 
 ### To access and use the admin dashboard, use the hardcoded password ----- > 1234
-
+### youtube link : https://youtu.be/7nXOtbyj1Ks
 
 
 ///////////// REFEREMCES USED FOR THIS PROJECT /////////////
