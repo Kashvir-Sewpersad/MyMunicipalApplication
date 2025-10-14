@@ -1,14 +1,30 @@
-﻿// Services/EventService.cs
+﻿
+//************************************************* start of file **************************************************//
+
+
+//----------------------- start of imports -------------------------------//
+
 using Programming_7312_Part_1.Data;
 using Programming_7312_Part_1.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
+ 
+ //------------------------ end of im[ports --------------------------// 
 namespace Programming_7312_Part_1.Services
 {
     public class EventService
     {
+        /*
+         *
+         * the below is the database context for the event service
+         *
+         * it is used to interact with the database 
+         *
+         * there is extensive use of advanced data structures vto meet poe requirements even though the bulk of this can just be done with arrays and lists
+         *
+         * 
+         */
         private readonly ApplicationDbContext _context;
 
         // Sorted dictionary for organizing events by date
@@ -37,10 +53,17 @@ namespace Programming_7312_Part_1.Services
 
         public EventService(ApplicationDbContext context)
         {
-            _context = context ?? throw new ArgumentNullException(nameof(context));
-            InitializeDataStructures();
+            _context = context ?? throw new ArgumentNullException(nameof(context)); // ensure context is not null
+            
+            InitializeDataStructures(); // load events 
         }
-
+        /*
+         *
+         * the below method is used to initialize the data structures used in the event service
+         *
+         *
+         * 
+         */
         private void InitializeDataStructures()
         {
             // Load all events from database
@@ -48,7 +71,7 @@ namespace Programming_7312_Part_1.Services
 
             foreach (var eventItem in allEvents)
             {
-                AddEventToDataStructures(eventItem);
+                AddEventToDataStructures(eventItem); // populate data structures
             }
 
             // Populate UniqueTags from existing events
@@ -58,18 +81,36 @@ namespace Programming_7312_Part_1.Services
                 {
                     foreach (var tag in eventItem.Tags)
                     {
-                        UniqueTags.Add(tag.ToLower());
+                        UniqueTags.Add(tag.ToLower()); // set to lover case to standardize the input 
                     }
                 }
             }
 
             // If no events exist, seed sample events
+            // the admin caan also add new events in the admin panel 
+            // this is just a baackup incase someone cant get the system to work 
             if (!allEvents.Any())
             {
-                SeedSampleEvents();
+                SeedSampleEvents(); // seed sample events which have been hard coded into the sysem . 
             }
         }
-
+        /*
+         *
+         * the below method is used to seed sample events into the database
+         * 
+         *
+         * this is useful for testing and demonstration purposes
+         *
+         * it adds a few sample events to the database and populates the data structures 
+         *
+         * these are the events which will show up o the local events by default
+         *
+         * an admin member can add new events in the admin panel and delete them
+         *
+         * the images are kept in the images folder in wwwroot for the default 
+         *
+         *  when a admin adds an event the image is stored in the uploads folder in wwwroot 
+         */
         private void SeedSampleEvents()
         {
             var sampleEvents = new List<Event>
@@ -79,7 +120,7 @@ namespace Programming_7312_Part_1.Services
                     Title = "Pothole Patch-Up",
                     Description = "This community event is structured to putting an end to those pesky potholes.Join us to make our environment safer.",
                     Category = "Environment",
-                    EventDate = DateTime.Now.AddDays(7),
+                    EventDate = DateTime.Now.AddDays(7), // event is 7 days  from now
                     Location = "Claremont",
                     Tags = new List<string> { "environment", "community", "volunteer" },
                     ImagePath = "/Images/pothole.jpg"
@@ -89,7 +130,7 @@ namespace Programming_7312_Part_1.Services
                     Title = "Wild Life Conservation",
                     Description = "Enjoy the wildlife local to the Tokai mountains. Bring trail snacks and water",
                     Category = "Entertainment",
-                    EventDate = DateTime.Now.AddDays(14),
+                    EventDate = DateTime.Now.AddDays(14), // event is 14 days from now
                     Location = "Tokai",
                     Tags = new List<string> { "outdoor", "family","environment" },
                     ImagePath = "/Images/newlands.jpg"
@@ -99,7 +140,7 @@ namespace Programming_7312_Part_1.Services
                     Title = "Crime Talk",
                     Description = "Learn about common crimes and prevention",
                     Category = "Education",
-                    EventDate = DateTime.Now.AddDays(21),
+                    EventDate = DateTime.Now.AddDays(21), // event is 21 days from now
                     Location = "Newlands Cricket Ground",
                     Tags = new List<string> {  "education", "innovation", "workshop" },
                     ImagePath = "/Images/crime.jpg"
@@ -109,7 +150,7 @@ namespace Programming_7312_Part_1.Services
                     Title = "Health Awareness Event",
                     Description = "Join fellow residents for a Hike through the Newlands forrest",
                     Category = "Health",
-                    EventDate = DateTime.Now.AddDays(10),
+                    EventDate = DateTime.Now.AddDays(10), // event is 10 days from now
                     Location = "Newlands Forrest",
                     Tags = new List<string> { "health", "wellness", "free", "community" }
                 },
@@ -118,7 +159,7 @@ namespace Programming_7312_Part_1.Services
                     Title = "Youth Sports ",
                     Description = "Come and support the next generation of athletes",
                     Category = "Sports",
-                    EventDate = DateTime.Now.AddDays(30),
+                    EventDate = DateTime.Now.AddDays(30), // event is 30 days from now
                     Location = "Newlands",
                     Tags = new List<string> { "sports", "youth", "tournament", "outdoor" },
                     ImagePath = "/Images/comunity.jpg"
@@ -127,41 +168,44 @@ namespace Programming_7312_Part_1.Services
 
             foreach (var eventItem in sampleEvents)
             {
-                _context.Events.Add(eventItem);
+                _context.Events.Add(eventItem); // add to database
             }
-            _context.SaveChanges();
+            _context.SaveChanges(); // saved to the database
 
-            // Now add to data structures
-            foreach (var eventItem in sampleEvents)
-            {
-                AddEventToDataStructures(eventItem);
-            }
+            
+                    foreach (var eventItem in sampleEvents)
+                    {
+                        AddEventToDataStructures(eventItem); // populate data structures
+                    }
         }
 
         public void AddEvent(Event eventItem)
         {
-            _context.Events.Add(eventItem);
-            _context.SaveChanges();
+            _context.Events.Add(eventItem); // add to database
+            
+            _context.SaveChanges(); // save to database
 
-            AddEventToDataStructures(eventItem);
+            AddEventToDataStructures(eventItem); // add event item to data structures
         }
 
         private void AddEventToDataStructures(Event eventItem)
         {
             // Add to EventsByDate
             var dateKey = eventItem.EventDate.Date;
-            if (!EventsByDate.ContainsKey(dateKey))
+            
+            
+            if (!EventsByDate.ContainsKey(dateKey)) // check if date exists
             {
-                EventsByDate[dateKey] = new HashSet<Event>();
+                EventsByDate[dateKey] = new HashSet<Event>(); // initialize if date doesn't exist
             }
             EventsByDate[dateKey].Add(eventItem);
 
             // Add to EventsByCategory
             if (!EventsByCategory.ContainsKey(eventItem.Category))
             {
-                EventsByCategory[eventItem.Category] = new LinkedList<Event>();
+                EventsByCategory[eventItem.Category] = new LinkedList<Event>(); // initialize if category doesn't exist
             }
-            EventsByCategory[eventItem.Category].AddLast(eventItem);
+            EventsByCategory[eventItem.Category].AddLast(eventItem); // add to end of linked list
 
             // Add to UniqueCategories
             UniqueCategories.Add(eventItem.Category);
@@ -171,7 +215,7 @@ namespace Programming_7312_Part_1.Services
             {
                 foreach (var tag in eventItem.Tags)
                 {
-                    UniqueTags.Add(tag.ToLower());
+                    UniqueTags.Add(tag.ToLower()); // llowercase 
                 }
             }
 
@@ -179,60 +223,75 @@ namespace Programming_7312_Part_1.Services
             RecentEvents.Enqueue(eventItem);
             if (RecentEvents.Count > 5)
             {
-                RecentEvents.Dequeue();
+                RecentEvents.Dequeue(); // remove the old  ones 
             }
 
-            // Add to FeaturedEvents (keep only 3)
+            // Add to FeaturedEvents 
             FeaturedEvents.Push(eventItem);
-            if (FeaturedEvents.Count > 3)
+            if (FeaturedEvents.Count > 3) // max 3 featured events
             {
                 var list = FeaturedEvents.ToList();
                 list.RemoveAt(list.Count - 1); // remove bottom of stack
                 FeaturedEvents.Clear();
-                foreach(var item in list.AsEnumerable().Reverse())
+                foreach(var item in list.AsEnumerable().Reverse()) // reverse to maintain order
                 {
-                    FeaturedEvents.Push(item);
+                    FeaturedEvents.Push(item); 
                 }
             }
 
             // Add to UpcomingEvents
             if (!UpcomingEvents.ContainsKey(eventItem.EventDate))
             {
-                UpcomingEvents[eventItem.EventDate] = new HashSet<Event>();
+                UpcomingEvents[eventItem.EventDate] = new HashSet<Event>(); // initialize if date doesn't exist
             }
-            UpcomingEvents[eventItem.EventDate].Add(eventItem);
+            UpcomingEvents[eventItem.EventDate].Add(eventItem); // add to set
         }
-
+        /*
+         *
+         *
+         *
+         * the below method is used to get all events from the database
+         *
+         * they are ordered by the event date in growing order 
+         *
+         * 
+         */
         public LinkedList<Event> GetAllEvents()
         {
-            return new LinkedList<Event>(_context.Events.OrderBy(e => e.EventDate));
+            return new LinkedList<Event>(_context.Events.OrderBy(e => e.EventDate)); // 
         }
-
+        /*
+         *
+         *  the below method is used to get events by category from the database
+         */
         public List<Event> GetEventsByCategory(string category)
         {
             if (EventsByCategory.ContainsKey(category))
             {
                 return EventsByCategory[category].OrderBy(e => e.EventDate).ToList();
             }
-            return new List<Event>();
+            return new List<Event>(); // return empty list if category not found
         }
-
+        /*
+         * the beloow method is used to get events by date range from the database
+         * 
+         */
         public LinkedList<Event> GetEventsByDateRange(DateTime startDate, DateTime endDate)
         {
             var result = new LinkedList<Event>();
 
             foreach (var dateKey in EventsByDate.Keys)
             {
-                if (dateKey >= startDate.Date && dateKey <= endDate.Date)
+                if (dateKey >= startDate.Date && dateKey <= endDate.Date) // check if date is within range
                 {
                     foreach (var eventItem in EventsByDate[dateKey])
                     {
-                        result.AddLast(eventItem);
+                        result.AddLast(eventItem); // add to result
                     }
                 }
             }
 
-            return new LinkedList<Event>(result.OrderBy(e => e.EventDate));
+            return new LinkedList<Event>(result.OrderBy(e => e.EventDate)); // order by event date
         }
 
         public LinkedList<Event> GetUpcomingEvents(int count = 5)
@@ -244,59 +303,60 @@ namespace Programming_7312_Part_1.Services
                 .Take(count));
         }
 
-        public LinkedList<Event> GetRecentEvents(int count = 3)
+        public LinkedList<Event> GetRecentEvents(int count = 3) // default to 3
         {
             return new LinkedList<Event>(RecentEvents.Reverse().Take(count));
         }
 
-        public LinkedList<Event> GetFeaturedEvents(int count = 3)
+        public LinkedList<Event> GetFeaturedEvents(int count = 3) // default to 3 
         {
-            return new LinkedList<Event>(FeaturedEvents.Take(count));
+            return new LinkedList<Event>(FeaturedEvents.Take(count)); // most recent featured events
         }
 
         public void RecordSearch(string searchTerm)
         {
             if (string.IsNullOrWhiteSpace(searchTerm)) return;
 
-            searchTerm = searchTerm.ToLower().Trim();
+            searchTerm = searchTerm.ToLower().Trim(); // standardize input trim the trailing whitespaces 
 
             if (SearchHistory.ContainsKey(searchTerm))
             {
-                SearchHistory[searchTerm]++;
+                SearchHistory[searchTerm]++; // increment count  ->> ++ 
             }
             else
             {
-                SearchHistory[searchTerm] = 1;
+                SearchHistory[searchTerm] = 1; // initialize count
             }
         }
 
         public LinkedList<Event> SearchEvents(string searchTerm)
         {
-            if (string.IsNullOrWhiteSpace(searchTerm))
-                return GetAllEvents();
+            if (string.IsNullOrWhiteSpace(searchTerm)) // check for empty or whitespace
+            
+                return GetAllEvents(); // return all events if search term is empty
 
-            RecordSearch(searchTerm);
+            RecordSearch(searchTerm); // record the search term into the system 
 
-            searchTerm = searchTerm.ToLower().Trim();
+            searchTerm = searchTerm.ToLower().Trim(); // lower case and remove white spaces ffor trailing and leading 
 
             var matchingEvents = _context.Events
                 .AsEnumerable()
                 .Where(e => e.Title.ToLower().Contains(searchTerm))
-                .ToList();
+                .ToList(); // search in title
 
             // Increment SearchCount for matching events
             foreach (var eventItem in matchingEvents)
             {
-                eventItem.SearchCount++;
+                eventItem.SearchCount++; // increment search count
             }
-            _context.SaveChanges();
+            _context.SaveChanges(); // save 
 
             return new LinkedList<Event>(matchingEvents.OrderBy(e => e.EventDate));
         }
 
         public bool UpdateEvent(Event updatedEvent)
         {
-            var existingEvent = _context.Events.FirstOrDefault(e => e.Id == updatedEvent.Id);
+            var existingEvent = _context.Events.FirstOrDefault(e => e.Id == updatedEvent.Id); // find existing event by id
             if (existingEvent == null)
             {
                 return false;
@@ -304,15 +364,24 @@ namespace Programming_7312_Part_1.Services
 
             // Store old values for cleanup
             var oldEventDate = existingEvent.EventDate;
+            
+            
             var oldCategory = existingEvent.Category;
 
             // Update properties
+            // fields shall be updated / overwriteen with the new information 
             existingEvent.Title = updatedEvent.Title;
+            
             existingEvent.Description = updatedEvent.Description;
+            
             existingEvent.Category = updatedEvent.Category;
+            
             existingEvent.EventDate = updatedEvent.EventDate;
+            
             existingEvent.Location = updatedEvent.Location;
+            
             existingEvent.ImagePath = updatedEvent.ImagePath;
+            
             existingEvent.Tags = updatedEvent.Tags ?? new List<string>();
 
             _context.SaveChanges();
@@ -331,7 +400,7 @@ namespace Programming_7312_Part_1.Services
                 // Remove from old category
                 if (EventsByCategory.ContainsKey(oldCategory))
                 {
-                    var node = EventsByCategory[oldCategory].First;
+                    var node = EventsByCategory[oldCategory].First; 
                     while (node != null)
                     {
                         var next = node.Next;
@@ -340,11 +409,12 @@ namespace Programming_7312_Part_1.Services
                             EventsByCategory[oldCategory].Remove(node);
                             break;
                         }
-                        node = next;
+                        node = next; // move to next node   
                     }
                     if (EventsByCategory[oldCategory].Count == 0)
                     {
-                        EventsByCategory.Remove(oldCategory);
+                        EventsByCategory.Remove(oldCategory);  // remove category if empty
+                        
                         UniqueCategories.Remove(oldCategory);
                     }
                 }
@@ -352,7 +422,7 @@ namespace Programming_7312_Part_1.Services
                 // Add to new category
                 if (!EventsByCategory.ContainsKey(updatedEvent.Category))
                 {
-                    EventsByCategory[updatedEvent.Category] = new LinkedList<Event>();
+                    EventsByCategory[updatedEvent.Category] = new LinkedList<Event>(); // update if category doesn't exist
                 }
                 EventsByCategory[updatedEvent.Category].AddLast(updatedEvent);
 
@@ -380,7 +450,7 @@ namespace Programming_7312_Part_1.Services
                     EventsByDate[oldDateKey].RemoveWhere(e => e.Id == updatedEvent.Id);
                     if (EventsByDate[oldDateKey].Count == 0)
                     {
-                        EventsByDate.Remove(oldDateKey);
+                        EventsByDate.Remove(oldDateKey);  // remove old date 
                     }
                 }
 
@@ -401,7 +471,7 @@ namespace Programming_7312_Part_1.Services
                     UpcomingEvents.Remove(oldEventDate);
                 }
             }
-            if (!UpcomingEvents.ContainsKey(updatedEvent.EventDate))
+            if (!UpcomingEvents.ContainsKey(updatedEvent.EventDate)) 
             {
                 UpcomingEvents[updatedEvent.EventDate] = new HashSet<Event>();
             }
@@ -410,28 +480,39 @@ namespace Programming_7312_Part_1.Services
 
         public Event GetEventById(int id)
         {
-            return _context.Events.FirstOrDefault(e => e.Id == id);
+            return _context.Events.FirstOrDefault(e => e.Id == id); // retrive by id 
         }
+        /*
+         *
+         * the below is for the upvote 
+         *
+         * 
+         */
 
         public bool UpvoteEvent(int eventId)
         {
             var eventItem = GetEventById(eventId);
             if (eventItem != null)
             {
-                eventItem.Upvotes++;
-                _context.SaveChanges();
+                eventItem.Upvotes++; // increment 
+                _context.SaveChanges(); // save and update the database 
+                
                 return true;
             }
             return false;
         }
-
-        public bool DownvoteEvent(int eventId)
+        /*
+         * the below is for the event regarding downvoting 
+         *
+         * 
+         */ 
+        public bool DownvoteEvent(int eventId) // using event id which is unique 
         {
             var eventItem = GetEventById(eventId);
             if (eventItem != null)
             {
-                eventItem.Downvotes++;
-                _context.SaveChanges();
+                eventItem.Downvotes++; // increment 
+                _context.SaveChanges(); // update and save databasse 
                 return true;
             }
             return false;
@@ -452,7 +533,7 @@ namespace Programming_7312_Part_1.Services
 
             foreach (var eventItem in highVotedEvents)
             {
-                recommendedEvents.AddLast(eventItem);
+                recommendedEvents.AddLast(eventItem); // event item added to recomended list in the last position 
             }
 
             // If we need more, use search history
@@ -483,7 +564,7 @@ namespace Programming_7312_Part_1.Services
 
                     foreach (var eventItem in events)
                     {
-                        recommendedEvents.AddLast(eventItem);
+                        recommendedEvents.AddLast(eventItem); // move to last 
                         usedEventIds.Add(eventItem.Id);
 
                         if (recommendedEvents.Count >= count)
@@ -505,7 +586,7 @@ namespace Programming_7312_Part_1.Services
 
                 foreach (var eventItem in upcoming)
                 {
-                    recommendedEvents.AddLast(eventItem);
+                    recommendedEvents.AddLast(eventItem); // move event to last position 
                 }
             }
 
@@ -532,7 +613,7 @@ namespace Programming_7312_Part_1.Services
         {
             if (string.IsNullOrEmpty(category))
             {
-                return new LinkedList<Event>();
+                return new LinkedList<Event>(); // new event 
             }
 
             // Recommendation based on upvotes and search history, filtered by category
@@ -548,7 +629,7 @@ namespace Programming_7312_Part_1.Services
 
             foreach (var eventItem in highVotedEvents)
             {
-                recommendedEvents.AddLast(eventItem);
+                recommendedEvents.AddLast(eventItem); 
             }
 
             // If we need more, use search history
@@ -559,10 +640,13 @@ namespace Programming_7312_Part_1.Services
                     .Take(3)
                     .Select(kv => kv.Key)
                     .ToList();
-
+            /*
+             * below is a use of a hash set 
+             * 
+             */ 
                 var usedEventIds = new HashSet<int>(recommendedEvents.Select(e => e.Id));
 
-                foreach (var search in topSearches)
+                foreach (var search in topSearches) // going through the top searches through a loop
                 {
                     var events = _context.Events
                         .AsEnumerable()
@@ -592,7 +676,9 @@ namespace Programming_7312_Part_1.Services
                 }
             }
 
-            // If still not enough, fill with upcoming events in this category
+            // If not enough, fill with upcoming events in this category 
+            
+            // the limit is  5 
             if (recommendedEvents.Count < count)
             {
                 var usedEventIds = new HashSet<int>(recommendedEvents.Select(e => e.Id));
@@ -616,7 +702,13 @@ namespace Programming_7312_Part_1.Services
                 .ThenByDescending(e => e.Upvotes)
                 .Take(count));
         }
-
+        /*
+         * the below method is to delete an event
+         *
+         * this is done by removing the id and clearingthe data assosciated with the id 
+         *
+         *  the system shall then update with the removed id and thus the event shall be removed 
+         */
         public bool DeleteEvent(int id)
         {
             var eventItem = _context.Events.FirstOrDefault(e => e.Id == id);
@@ -638,7 +730,14 @@ namespace Programming_7312_Part_1.Services
 
             return true;
         }
-
+        /*
+         *below is the action to remove the event from the ddata structures
+         *
+         * this is to ensure that even though it has been deleted from the database, it does not keep running in memory and actually updates the system
+         *
+         * this works by removing the date aand event key and thus invalidating it 
+         * 
+         */
         private void RemoveEventFromDataStructures(Event eventItem, DateTime oldEventDate, string oldCategory)
         {
             // Remove from EventsByDate
@@ -678,7 +777,7 @@ namespace Programming_7312_Part_1.Services
             RecentEvents.Clear();
             foreach (var e in recentList)
             {
-                RecentEvents.Enqueue(e);
+                RecentEvents.Enqueue(e); // remove from data structure 
             }
 
             // Remove from FeaturedEvents (Stack)
@@ -701,3 +800,4 @@ namespace Programming_7312_Part_1.Services
         }
     }
 }
+ //************************************************* end of file **************************************************//
