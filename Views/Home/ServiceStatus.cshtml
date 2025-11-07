@@ -59,18 +59,22 @@
                                     <span class="badge @(issue.Status == "Resolved" ? "bg-success" : issue.Status == "In Progress" ? "bg-warning" : "bg-secondary")">@issue.Status</span>
                                 </td>
                                 <td>@issue.ReportedDate.ToString("yyyy-MM-dd HH:mm")</td>
-                                <td id="upvotes-@issue.Id">
-                                    <span class="vote-count">@issue.Upvotes</span>
-                                    <i class="fas fa-thumbs-up text-success"></i>
+                                <td class="upvotes-cell">
+                                    <span class="upvote-count">@issue.Upvotes</span>
                                 </td>
-                                <td id="downvotes-@issue.Id">
-                                    <span class="vote-count">@issue.Downvotes</span>
-                                    <i class="fas fa-thumbs-down text-danger"></i>
+                                <td class="downvotes-cell">
+                                    <span class="downvote-count">@issue.Downvotes</span>
                                 </td>
                                 <td>
-                                    <button class="btn btn-sm btn-success" onclick="upvoteIssue(@issue.Id)">👍</button>
-                                    <button class="btn btn-sm btn-danger" onclick="downvoteIssue(@issue.Id)">👎</button>
-                                    <button class="btn btn-sm btn-primary" onclick="showDetails(@issue.Id)">Details</button>
+                                    <div class="d-flex align-items-center">
+                                        <button class="btn btn-sm btn-success me-2 vote-btn" data-issue-id="@issue.Id" data-vote-type="upvote">
+                                            <i class="fas fa-thumbs-up"></i> <span class="upvote-count">@issue.Upvotes</span>
+                                        </button>
+                                        <button class="btn btn-sm btn-danger me-2 vote-btn" data-issue-id="@issue.Id" data-vote-type="downvote">
+                                            <i class="fas fa-thumbs-down"></i> <span class="downvote-count">@issue.Downvotes</span>
+                                        </button>
+                                        <button class="btn btn-sm btn-primary" onclick="showDetails(@issue.Id)">Details</button>
+                                    </div>
                                 </td>
                             </tr>
                         }
@@ -94,7 +98,10 @@
             </div>
         </div>
 
-        <a href="@Url.Action("Index")" class="back-btn">Back to Main</a>
+        <div class="d-flex justify-content-between align-items-center mt-4">
+            <a href="@Url.Action("Index")" class="back-btn">Back to Main</a>
+            <a href="@Url.Action("ReportIssues")" class="neon-button">Submit Service Request</a>
+        </div>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
@@ -113,45 +120,49 @@
                 });
         }
 
-        function upvoteIssue(issueId) {
-            fetch('/Home/UpvoteIssue', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ issueId: issueId })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    updateVoteDisplay(issueId, data.upvotes, data.downvotes);
-                }
-            });
-        }
+        // Voting functionality
+        document.addEventListener('click', function(e) {
+            if (e.target.closest('.vote-btn')) {
+                e.preventDefault();
+                const button = e.target.closest('.vote-btn');
+                const issueId = button.getAttribute('data-issue-id');
+                const voteType = button.getAttribute('data-vote-type');
 
-        function downvoteIssue(issueId) {
-            fetch('/Home/DownvoteIssue', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ issueId: issueId })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    updateVoteDisplay(issueId, data.upvotes, data.downvotes);
-                }
-            });
-        }
+                // Disable button to prevent multiple clicks
+                button.disabled = true;
 
-        function updateVoteDisplay(issueId, upvotes, downvotes) {
-            const upvotesCell = document.getElementById('upvotes-' + issueId);
-            const downvotesCell = document.getElementById('downvotes-' + issueId);
+                const url = voteType === 'upvote' ? '@Url.Action("UpvoteIssue", "Home")' : '@Url.Action("DownvoteIssue", "Home")';
+                fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: `issueId=${issueId}`
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Update vote counts
+                        const row = button.closest('tr');
+                        const upvoteSpan = row.querySelector('.upvote-count');
+                        const downvoteSpan = row.querySelector('.downvote-count');
 
-            upvotesCell.innerHTML = `<span class="vote-count">${upvotes}</span> <i class="fas fa-thumbs-up text-success"></i>`;
-            downvotesCell.innerHTML = `<span class="vote-count">${downvotes}</span> <i class="fas fa-thumbs-down text-danger"></i>`;
-        }
+                        upvoteSpan.textContent = data.upvotes;
+                        downvoteSpan.textContent = data.downvotes;
+                    } else {
+                        alert('Failed to register vote. Please try again.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred. Please try again.');
+                })
+                .finally(() => {
+                    // Re-enable button
+                    button.disabled = false;
+                });
+            }
+        });
 
         // Search filter (client-side)
         document.getElementById('searchId').addEventListener('input', function() {
