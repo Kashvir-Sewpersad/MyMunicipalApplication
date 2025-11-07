@@ -81,6 +81,8 @@ namespace Programming_7312_Part_1.Data
                 entity.Property(i => i.Downvotes).HasDefaultValue(0);
                 entity.Property(i => i.UserId).HasMaxLength(100);
                 entity.Property(i => i.ReportedDate).HasDefaultValueSql("datetime('now')");
+                entity.Property(i => i.AdminResponse).HasMaxLength(50);
+                entity.Property(i => i.AdminComments).HasMaxLength(1000);
             });
         }
     }

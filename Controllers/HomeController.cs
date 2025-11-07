@@ -74,14 +74,56 @@ namespace Programming_7312_Part_1.Controllers
 
         public IActionResult ReportIssues()
         {
-            ViewBag.Categories = new[] { "Sanitation", "Roads", "Utilities", "Other" }; // categories 
-            return View(new Issue()); // new issue 
+            ViewBag.Categories = new[] {
+                "Sanitation", "Roads", "Utilities", "Other",
+                "animal carcass removal",
+                "blocked stormwater drains",
+                "electricity outage/ unscheduled outages",
+                "graffiti and stolen or vandalised City property",
+                "uncollected refuse or waste",
+                "tree removal and cutting",
+                "tree root, trimming, pruning",
+                "illegal dumping",
+                "leaking water pipes",
+                "maintenance of open spaces, parks and public spaces",
+                "mowing of vegetation",
+                "noise nuisances",
+                "problem buildings (abandoned and derelict buildings)",
+                "public toilets/ ablution facilities unhygienic",
+                "speeding and traffic offences",
+                "traffic calming (speed bumps), new or damaged street signs",
+                "unruly or inappropriate behaviour",
+                "unscheduled water supply disruptions",
+                "vagrants and illegal squatting"
+            }; // categories
+            return View(new Issue()); // new issue
         }
 
         [HttpPost]
         public async Task<IActionResult> ReportIssues(Issue model, IFormFile attachment)
         {
-            ViewBag.Categories = new[] { "Sanitation", "Roads", "Utilities", "Other" }; // catergories
+            ViewBag.Categories = new[] {
+                "Sanitation", "Roads", "Utilities", "Other",
+                "animal carcass removal",
+                "blocked stormwater drains",
+                "electricity outage/ unscheduled outages",
+                "graffiti and stolen or vandalised City property",
+                "uncollected refuse or waste",
+                "tree removal and cutting",
+                "tree root, trimming, pruning",
+                "illegal dumping",
+                "leaking water pipes",
+                "maintenance of open spaces, parks and public spaces",
+                "mowing of vegetation",
+                "noise nuisances",
+                "problem buildings (abandoned and derelict buildings)",
+                "public toilets/ ablution facilities unhygienic",
+                "speeding and traffic offences",
+                "traffic calming (speed bumps), new or damaged street signs",
+                "unruly or inappropriate behaviour",
+                "unscheduled water supply disruptions",
+                "vagrants and illegal squatting"
+            }; // categories
 
             if (!ModelState.IsValid)
             {

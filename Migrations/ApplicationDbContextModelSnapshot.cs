@@ -185,6 +185,14 @@ namespace Programming_7312_Part_1.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("AdminComments")
+                        .HasMaxLength(1000)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("AdminResponse")
+                        .HasMaxLength(50)
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("AttachedFilePath")
                         .HasMaxLength(500)
                         .HasColumnType("TEXT");
@@ -213,6 +221,9 @@ namespace Programming_7312_Part_1.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
                         .HasDefaultValueSql("datetime('now')");
+
+                    b.Property<DateTime?>("ResponseDate")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Status")
                         .IsRequired()

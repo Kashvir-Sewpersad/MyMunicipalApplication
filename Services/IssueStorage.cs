@@ -312,6 +312,51 @@ namespace Programming_7312_Part_1.Services
         {
             return _context.Issues.OrderByDescending(i => i.Upvotes).ToList();
         }
+
+        public bool ApproveIssue(int issueId, string comments = null)
+        {
+            var issue = _context.Issues.Find(issueId);
+            if (issue != null)
+            {
+                issue.AdminResponse = "Approved";
+                issue.AdminComments = comments;
+                issue.ResponseDate = DateTime.Now;
+                issue.Status = "Approved";
+                _context.SaveChanges();
+                return true;
+            }
+            return false;
+        }
+
+        public bool RejectIssue(int issueId, string comments = null)
+        {
+            var issue = _context.Issues.Find(issueId);
+            if (issue != null)
+            {
+                issue.AdminResponse = "Rejected";
+                issue.AdminComments = comments;
+                issue.ResponseDate = DateTime.Now;
+                issue.Status = "Rejected";
+                _context.SaveChanges();
+                return true;
+            }
+            return false;
+        }
+
+        public bool DeleteIssue(int issueId, string comments = null)
+        {
+            var issue = _context.Issues.Find(issueId);
+            if (issue != null)
+            {
+                issue.AdminResponse = "Deleted";
+                issue.AdminComments = comments;
+                issue.ResponseDate = DateTime.Now;
+                issue.Status = "Deleted";
+                _context.SaveChanges();
+                return true;
+            }
+            return false;
+        }
     }
 }
 

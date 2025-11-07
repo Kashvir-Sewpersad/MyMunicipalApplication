@@ -361,23 +361,89 @@ namespace Programming_7312_Part_1.Controllers
             return RedirectToAction("Dashboard");
         }
         
+        // POST: Admin/ApproveIssue
+        [HttpPost]
+        public IActionResult ApproveIssue(int issueId, string comments)
+        {
+            if (HttpContext.Session.GetString("AdminLoggedIn") != "true")
+            {
+                return RedirectToAction("Login");
+            }
+
+            var success = _issueStorage.ApproveIssue(issueId, comments);
+            if (!success)
+            {
+                TempData["Error"] = "Failed to approve issue.";
+            }
+            else
+            {
+                TempData["Success"] = "Issue approved successfully.";
+            }
+
+            return RedirectToAction("Dashboard");
+        }
+
+        // POST: Admin/RejectIssue
+        [HttpPost]
+        public IActionResult RejectIssue(int issueId, string comments)
+        {
+            if (HttpContext.Session.GetString("AdminLoggedIn") != "true")
+            {
+                return RedirectToAction("Login");
+            }
+
+            var success = _issueStorage.RejectIssue(issueId, comments);
+            if (!success)
+            {
+                TempData["Error"] = "Failed to reject issue.";
+            }
+            else
+            {
+                TempData["Success"] = "Issue rejected successfully.";
+            }
+
+            return RedirectToAction("Dashboard");
+        }
+
+        // POST: Admin/DeleteIssue
+        [HttpPost]
+        public IActionResult DeleteIssue(int issueId, string comments)
+        {
+            if (HttpContext.Session.GetString("AdminLoggedIn") != "true")
+            {
+                return RedirectToAction("Login");
+            }
+
+            var success = _issueStorage.DeleteIssue(issueId, comments);
+            if (!success)
+            {
+                TempData["Error"] = "Failed to delete issue.";
+            }
+            else
+            {
+                TempData["Success"] = "Issue deleted successfully.";
+            }
+
+            return RedirectToAction("Dashboard");
+        }
+
         // POST: Admin/Logout
-        
+
         /*
          *
          * the below method contains the functionality for logging and admin out
          *
          * this comes in the form of a simple session end
          *
-         * it is not the safest but works 
+         * it is not the safest but works
          *
-         * 
+         *
          */
         [HttpPost]
         public IActionResult Logout()
         {
             HttpContext.Session.Remove("AdminLoggedIn");
-            return RedirectToAction("Index", "Home"); //  admin is directed back to home page 
+            return RedirectToAction("Index", "Home"); //  admin is directed back to home page
         }
     }
 }

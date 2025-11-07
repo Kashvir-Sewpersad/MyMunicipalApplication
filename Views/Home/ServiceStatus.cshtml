@@ -44,6 +44,7 @@
                             <th>Date</th>
                             <th>Upvotes</th>
                             <th>Downvotes</th>
+                            <th>Admin Response</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -64,6 +65,26 @@
                                 </td>
                                 <td class="downvotes-cell">
                                     <span class="downvote-count">@issue.Downvotes</span>
+                                </td>
+                                <td>
+                                    @if (!string.IsNullOrEmpty(issue.AdminResponse))
+                                    {
+                                        <div class="admin-response">
+                                            <span class="badge @(issue.AdminResponse == "Approved" ? "bg-success" : issue.AdminResponse == "Rejected" ? "bg-danger" : "bg-secondary")">@issue.AdminResponse</span>
+                                            @if (!string.IsNullOrEmpty(issue.AdminComments))
+                                            {
+                                                <br><small class="text-muted">@issue.AdminComments</small>
+                                            }
+                                            @if (issue.ResponseDate.HasValue)
+                                            {
+                                                <br><small class="text-muted">Response: @issue.ResponseDate.Value.ToString("yyyy-MM-dd HH:mm")</small>
+                                            }
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">Pending</span>
+                                    }
                                 </td>
                                 <td>
                                     <div class="d-flex align-items-center">

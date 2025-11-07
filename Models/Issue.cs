@@ -29,6 +29,11 @@ namespace Programming_7312_Part_1.Models
         // New: User ID for tracking
         public string? UserId { get; set; } = string.Empty;
 
+        // Admin response fields
+        public string? AdminResponse { get; set; } // "Approved", "Rejected", "Deleted"
+        public string? AdminComments { get; set; }
+        public DateTime? ResponseDate { get; set; }
+
         public Issue()
         {
             ReportedDate = DateTime.Now;
