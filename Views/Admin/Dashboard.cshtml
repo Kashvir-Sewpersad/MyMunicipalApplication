@@ -16,27 +16,27 @@
         <h2>Reported Issues</h2>
         <table class="table table-dark">
             <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Category</th>
-                    <th>Description</th>
-                    <th>Location</th>
-                    <th>Status</th>
-                    <th>Date</th>
-                </tr>
+            <tr>
+                <th>ID</th>
+                <th>Category</th>
+                <th>Description</th>
+                <th>Location</th>
+                <th>Status</th>
+                <th>Date</th>
+            </tr>
             </thead>
             <tbody>
-                @foreach (var issue in ViewBag.Issues)
-                {
-                    <tr>
-                        <td>@issue.Id</td>
-                        <td>@issue.Category</td>
-                        <td>@issue.Description</td>
-                        <td>@issue.Location</td>
-                        <td>@issue.Status</td>
-                        <td>@issue.ReportedDate.ToString("yyyy-MM-dd HH:mm")</td>
-                    </tr>
-                }
+            @foreach (var issue in ViewBag.Issues)
+            {
+                <tr>
+                    <td>@issue.Id</td>
+                    <td>@issue.Category</td>
+                    <td>@issue.Description</td>
+                    <td>@issue.Location</td>
+                    <td>@issue.Status</td>
+                    <td>@issue.ReportedDate.ToString("yyyy-MM-dd HH:mm")</td>
+                </tr>
+            }
             </tbody>
         </table>
 
@@ -54,43 +54,43 @@
         }
         <table class="table table-dark">
             <thead>
-                <tr>
-                    <th>Title</th>
-                    <th>Category</th>
-                    <th>Priority</th>
-                    <th>Created Date</th>
-                    <th>Actions</th>
-                </tr>
+            <tr>
+                <th>Title</th>
+                <th>Category</th>
+                <th>Priority</th>
+                <th>Created Date</th>
+                <th>Actions</th>
+            </tr>
             </thead>
             <tbody>
-                @foreach (var announcement in ViewBag.Announcements)
-                {
-                    <tr>
-                        <td>@announcement.Title</td>
-                        <td>@announcement.Category</td>
-                        <td>
-                            @if (announcement.Priority == 3)
-                            {
-                                <span class="badge bg-danger">High</span>
-                            }
-                            else if (announcement.Priority == 2)
-                            {
-                                <span class="badge bg-warning">Medium</span>
-                            }
-                            else
-                            {
-                                <span class="badge bg-secondary">Low</span>
-                            }
-                        </td>
-                        <td>@announcement.CreatedDate.ToString("yyyy-MM-dd")</td>
-                        <td>
-                            <form method="post" action="@Url.Action("DeleteAnnouncement", "Admin")" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this announcement?');">
-                                <input type="hidden" name="id" value="@announcement.Id" />
-                                <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
-                            </form>
-                        </td>
-                    </tr>
-                }
+            @foreach (var announcement in ViewBag.Announcements)
+            {
+                <tr>
+                    <td>@announcement.Title</td>
+                    <td>@announcement.Category</td>
+                    <td>
+                        @if (announcement.Priority == 3)
+                        {
+                            <span class="badge bg-danger">High</span>
+                        }
+                        else if (announcement.Priority == 2)
+                        {
+                            <span class="badge bg-warning">Medium</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-secondary">Low</span>
+                        }
+                    </td>
+                    <td>@announcement.CreatedDate.ToString("yyyy-MM-dd")</td>
+                    <td>
+                        <form method="post" action="@Url.Action("DeleteAnnouncement", "Admin")" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this announcement?');">
+                            <input type="hidden" name="id" value="@announcement.Id" />
+                            <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            }
             </tbody>
         </table>
 
@@ -108,32 +108,33 @@
         }
         <table class="table table-dark">
             <thead>
-                <tr>
-                    <th>Title</th>
-                    <th>Category</th>
-                    <th>Date</th>
-                    <th>Location</th>
-                    <th>Actions</th>
-                </tr>
+            <tr>
+                <th>Title</th>
+                <th>Category</th>
+                <th>Date</th>
+                <th>Location</th>
+                <th>Actions</th>
+            </tr>
             </thead>
             <tbody>
-                @foreach (var eventItem in ViewBag.Events)
-                {
-                    <tr>
-                        <td>@eventItem.Title</td>
-                        <td>@eventItem.Category</td>
-                        <td>@eventItem.EventDate.ToString("yyyy-MM-dd")</td>
-                        <td>@eventItem.Location</td>
-                        <td>
-                            <a href="@Url.Action("EditEvent", "Admin", new { id = eventItem.Id })" class="btn btn-sm btn-outline-primary">Edit</a>
-                            <form method="post" action="@Url.Action("DeleteEvent", "Admin")" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this event?');">
-                                <input type="hidden" name="id" value="@eventItem.Id" />
-                                <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
-                            </form>
-                        </td>
-                    </tr>
-                }
+            @foreach (var eventItem in ViewBag.Events)
+            {
+                <tr>
+                    <td>@eventItem.Title</td>
+                    <td>@eventItem.Category</td>
+                    <td>@eventItem.EventDate.ToString("yyyy-MM-dd")</td>
+                    <td>@eventItem.Location</td>
+                    <td>
+                        <a href="@Url.Action("EditEvent", "Admin", new { id = eventItem.Id })" class="btn btn-sm btn-outline-primary">Edit</a>
+                        <form method="post" action="@Url.Action("DeleteEvent", "Admin")" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this event?');">
+                            <input type="hidden" name="id" value="@eventItem.Id" />
+                            <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            }
             </tbody>
         </table>
     </div>
 </div>
+
