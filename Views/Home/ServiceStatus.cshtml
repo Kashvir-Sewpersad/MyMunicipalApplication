@@ -6,7 +6,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- ... existing head ... -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Municipal Services App</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
     <div class="report-container">
@@ -54,8 +59,14 @@
                                     <span class="badge @(issue.Status == "Resolved" ? "bg-success" : issue.Status == "In Progress" ? "bg-warning" : "bg-secondary")">@issue.Status</span>
                                 </td>
                                 <td>@issue.ReportedDate.ToString("yyyy-MM-dd HH:mm")</td>
-                                <td id="upvotes-@issue.Id">@issue.Upvotes</td>
-                                <td id="downvotes-@issue.Id">@issue.Downvotes</td>
+                                <td id="upvotes-@issue.Id">
+                                    <span class="vote-count">@issue.Upvotes</span>
+                                    <i class="fas fa-thumbs-up text-success"></i>
+                                </td>
+                                <td id="downvotes-@issue.Id">
+                                    <span class="vote-count">@issue.Downvotes</span>
+                                    <i class="fas fa-thumbs-down text-danger"></i>
+                                </td>
                                 <td>
                                     <button class="btn btn-sm btn-success" onclick="upvoteIssue(@issue.Id)">👍</button>
                                     <button class="btn btn-sm btn-danger" onclick="downvoteIssue(@issue.Id)">👎</button>
@@ -113,8 +124,7 @@
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    document.getElementById('upvotes-' + issueId).textContent = data.upvotes;
-                    document.getElementById('downvotes-' + issueId).textContent = data.downvotes;
+                    updateVoteDisplay(issueId, data.upvotes, data.downvotes);
                 }
             });
         }
@@ -130,10 +140,17 @@
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    document.getElementById('upvotes-' + issueId).textContent = data.upvotes;
-                    document.getElementById('downvotes-' + issueId).textContent = data.downvotes;
+                    updateVoteDisplay(issueId, data.upvotes, data.downvotes);
                 }
             });
+        }
+
+        function updateVoteDisplay(issueId, upvotes, downvotes) {
+            const upvotesCell = document.getElementById('upvotes-' + issueId);
+            const downvotesCell = document.getElementById('downvotes-' + issueId);
+
+            upvotesCell.innerHTML = `<span class="vote-count">${upvotes}</span> <i class="fas fa-thumbs-up text-success"></i>`;
+            downvotesCell.innerHTML = `<span class="vote-count">${downvotes}</span> <i class="fas fa-thumbs-down text-danger"></i>`;
         }
 
         // Search filter (client-side)
