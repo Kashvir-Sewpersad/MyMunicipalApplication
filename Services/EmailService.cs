@@ -155,7 +155,7 @@ namespace Programming_7312_Part_1.Services
          *
          *
          */
-        public async Task<bool> SendIssueConfirmationAsync(string recipientEmail, string location, string category, string description)
+        public async Task<bool> SendIssueConfirmationAsync(string recipientEmail, int issueId, string location, string category, string description)
         {
             var emailBody = $@"
                 <html>
@@ -179,12 +179,13 @@ namespace Programming_7312_Part_1.Services
                             <p>We have received your issue report and will address it as soon as possible.</p>
 
                             <h3>Your Issue Details:</h3>
+                            <p><strong>Tracking Number:</strong> #{issueId}</p>
                             <p><strong>Location:</strong> {location}</p>
                             <p><strong>Category:</strong> {category}</p>
                             <p><strong>Description:</strong></p>
                             <p>{description.Replace("\n", "<br>")}</p>
 
-                            <p>You can track the status of your report by visiting our Service Status page. We will notify you of any updates via email.</p>
+                            <p>You can track the status of your report by visiting our Service Status page and using your tracking number. We will notify you of any updates via email.</p>
 
                             <p>Best regards,<br>
                             Municipal Services Team</p>
