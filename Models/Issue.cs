@@ -16,6 +16,10 @@ namespace Programming_7312_Part_1.Models
         [Required]
         public string? Description { get; set; }
 
+        [Required]
+        [EmailAddress]
+        public string? Email { get; set; }
+
         public string? AttachedFilePath { get; set; }
 
         public string Status { get; set; } = "Pending"; // Pending, In Progress, Resolved

@@ -92,6 +92,11 @@
                                     <div class="milestone-text">Category Selected</div>
                                     <div class="milestone-check"><i class="fas fa-check"></i></div>
                                 </div>
+                                <div class="milestone-item" data-milestone="email">
+                                    <div class="milestone-icon"><i class="fas fa-envelope"></i></div>
+                                    <div class="milestone-text">Email Provided</div>
+                                    <div class="milestone-check"><i class="fas fa-check"></i></div>
+                                </div>
                                 <div class="milestone-item" data-milestone="description">
                                     <div class="milestone-icon"><i class="fas fa-align-left"></i></div>
                                     <div class="milestone-text">Description Provided</div>
@@ -231,6 +236,13 @@
                                     <span asp-validation-for="Category" class="text-danger"></span>
                                 </div>
 
+                                <!-- Email field -->
+                                <div class="neon-form-group">
+                                    <label asp-for="Email" class="form-label">Email Address</label>
+                                    <input asp-for="Email" type="email" class="neon-input form-control" placeholder="Enter your email address..." required>
+                                    <span asp-validation-for="Email" class="text-danger"></span>
+                                </div>
+
                                 <!-- Description field -->
                                 <div class="neon-form-group">
                                     <label asp-for="Description" class="form-label">Description</label>
@@ -354,6 +366,7 @@
             const milestoneMap = {
                 "Location": "location",
                 "Category": "category",
+                "Email": "email",
                 "Description": "description",
                 "attachment": "attachment"
             };

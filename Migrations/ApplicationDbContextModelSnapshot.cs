@@ -212,6 +212,10 @@ namespace Programming_7312_Part_1.Migrations
                         .HasColumnType("INTEGER")
                         .HasDefaultValue(0);
 
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Location")
                         .IsRequired()
                         .HasMaxLength(200)
