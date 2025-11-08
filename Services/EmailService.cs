@@ -145,6 +145,59 @@ namespace Programming_7312_Part_1.Services
 
             return await SendEmailAsync(recipientEmail, "Contact Confirmation - Municipal Services", emailBody, recipientName); // sending the email
         }
+
+        /*
+         * the below is to populate the email body for the issue report confirmation email
+         *
+         *
+         * this is what shows up in the users email
+         *
+         *
+         *
+         */
+        public async Task<bool> SendIssueConfirmationAsync(string recipientEmail, string location, string category, string description)
+        {
+            var emailBody = $@"
+                <html>
+                <head>
+                    <style>
+                        body {{ font-family: Arial, sans-serif; line-height: 1.6; color: #333; }}
+                        .container {{ max-width: 600px; margin: 0 auto; padding: 20px; }}
+                        .header {{ background-color: #357EC7; color: white; padding: 20px; text-align: center; }}
+                        .content {{ padding: 20px; background-color: #f9f9f9; }}
+                        .footer {{ background-color: #333; color: white; padding: 10px; text-align: center; font-size: 12px; }}
+                    </style>
+                </head>
+                <body>
+                    <div class='container'>
+                        <div class='header'>
+                            <h1>Municipal Services</h1>
+                            <p>Issue Report Confirmation</p>
+                        </div>
+                        <div class='content'>
+                            <h2>Thank you for reporting an issue!</h2>
+                            <p>We have received your issue report and will address it as soon as possible.</p>
+
+                            <h3>Your Issue Details:</h3>
+                            <p><strong>Location:</strong> {location}</p>
+                            <p><strong>Category:</strong> {category}</p>
+                            <p><strong>Description:</strong></p>
+                            <p>{description.Replace("\n", "<br>")}</p>
+
+                            <p>You can track the status of your report by visiting our Service Status page. We will notify you of any updates via email.</p>
+
+                            <p>Best regards,<br>
+                            Municipal Services Team</p>
+                        </div>
+                        <div class='footer'>
+                            <p>This is an automated confirmation email. Please do not reply to this message.</p>
+                        </div>
+                    </div>
+                </body>
+                </html>";
+
+            return await SendEmailAsync(recipientEmail, "Issue Report Confirmation - Municipal Services", emailBody); // sending the email
+        }
     }
 }
 

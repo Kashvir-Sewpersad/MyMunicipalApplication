@@ -166,7 +166,10 @@ namespace Programming_7312_Part_1.Controllers
             // Store issues
             _issueStorage.AddIssue(model); // Now updates advanced structures
 
-            ViewBag.SuccessMessage = "Issue reported successfully!";
+            // Send confirmation email
+            await _emailService.SendIssueConfirmationAsync(model.Email, model.Location, model.Category, model.Description);
+
+            ViewBag.SuccessMessage = "Issue reported successfully! A confirmation email has been sent to your email address.";
             ViewBag.EngagementMessage = "Your reports make our community better!";
 
             ModelState.Clear();
