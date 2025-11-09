@@ -28,7 +28,7 @@
     </style>
 </head>
 <body>
-    <!-- Animated background -->
+    <!------------------------------------------------ Animated background --------------------------------------------->
     <div class="particles">
         <div class="particle"></div>
         <div class="particle"></div>
@@ -44,13 +44,13 @@
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-lg-8">
-                    <!-- Page Title -->
+                    <!------------------------------------------ Page Title ----------------------------------------->
                     <div class="page-title">
                         <h1 class="glowing-text">Report Issues</h1>
                         <p class="subtitle">Help us improve by reporting problems you encounter</p>
                     </div>
                     <div class="neon-card">
-                        <!-- Success Message if the process is ssucessful it will exit  -->
+                        <!--------------------------- Success Message if the process is ssucessful it will exit  -------------------------------->
                         @if (!string.IsNullOrEmpty(ViewBag.SuccessMessage))
                         {
                             <div class="neon-alert">
@@ -68,7 +68,7 @@
                             </div>
                         }
 
-                        <!-- Progress Section -->
+                        <!-------------------------------------- Progress Section ---------------------------------------->
                         <div class="progress-section">
                             <div class="progress-header d-flex justify-content-between">
                                 <span class="progress-title">Form Completion</span>
@@ -78,7 +78,7 @@
                                 <div class="neon-progress-bar" id="progressBar" style="width: 0%;"></div>
                             </div>
                         </div>
-                        <!-- Milestones Section -->
+                        <!--------------------------------------------- Milestones Section ---------------------------------->
                         <div class="milestone-section">
                             <h4 class="milestone-title">Progress Milestones</h4>
                             <div class="milestone-grid">
@@ -109,11 +109,11 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- Form Section -->
+                        <!---------------------------------------- Form Section ----------------------------------------------->
                         <div class="form-section">
                             <form id="issueForm" asp-action="ReportIssues" method="post" enctype="multipart/form-data">
-                                <!-- Location field -->
-                                <!-- preloaded with 100 tokai addresses  -->
+                                <!--------------------------------------------------- Location field ------------------------------->
+                                <!----------------------------------- preloaded with 100 tokai addresses  ------------------------------------->
                                 <div class="neon-form-group">
                                     <label asp-for="Location" class="form-label">Location</label>
                                     <div class="location-wrapper">
@@ -193,7 +193,7 @@
                                     <span asp-validation-for="Location" class="text-danger"></span>
                                 </div>
 
-                                <!-- Category  -->
+                                <!------------------------------------------------ Category  -------------------------------------------->
                                 <div class="neon-form-group">
                                     <label asp-for="Category" class="form-label">Category</label>
                                     <select asp-for="Category" class="neon-select form-control" required>
@@ -207,7 +207,7 @@
                                         }
                                         else
                                         {
-                                            <!-- preloaded on scrollable bar  -->
+                                            <!--------------------------------- preloaded on scrollable bar  ------------------------------------>
                                             <option value="Sanitation">Sanitation</option>
                                             <option value="Roads">Roads</option>
                                             <option value="Utilities">Utilities</option>
@@ -236,21 +236,21 @@
                                     <span asp-validation-for="Category" class="text-danger"></span>
                                 </div>
 
-                                <!-- Email field -->
+                                <!--------------------------------------- Email field ------------------------------------------>
                                 <div class="neon-form-group">
                                     <label asp-for="Email" class="form-label">Email Address</label>
                                     <input asp-for="Email" type="email" class="neon-input form-control" placeholder="Enter your email address..." required>
                                     <span asp-validation-for="Email" class="text-danger"></span>
                                 </div>
 
-                                <!-- Description field -->
+                                <!--------------------------------------------- Description field ----------------------------------->
                                 <div class="neon-form-group">
                                     <label asp-for="Description" class="form-label">Description</label>
                                     <textarea asp-for="Description" class="neon-textarea form-control" rows="4" placeholder="Describe the issue in detail..." required></textarea>
                                     <span asp-validation-for="Description" class="text-danger"></span>
                                 </div>
 
-                                <!-- File upload  -->
+                                <!------------------------------------------------ File upload  ----------------------------------------------->
                                 <div class="neon-form-group">
                                     <label class="form-label">Attach Media (Optional)</label>
                                     <div class="file-upload-wrapper">
@@ -273,7 +273,7 @@
                                 </div>
                             </form>
                         </div>
-                        <!-- Footer BACK TO MAIN (INDEX / HOME ) -->
+                        <!-------------------------------------------------------- Footer BACK TO MAIN -- ---------------------------->
                         <a href="@Url.Action("Index", "Home")" id="backToMainBtn" class="btn rounded-pill px-4 py-2" style="background-color: #87CEEB; color: #000000; border: none;">
                             <i class="fas fa-arrow-left"></i> Back to Main Menu
                         </a>
@@ -291,7 +291,7 @@
         const locationOptions = document.querySelectorAll('.location-option');
 
         if (locationInput && locationDropdown && locationToggle) {
-            // Add click functionality to dropdown toggle
+            //-------------------------- Add click functionality to dropdown toggle---------------------------------------
             locationToggle.addEventListener('click', function() {
                 if (locationDropdown.classList.contains('d-none')) {
                     locationDropdown.classList.remove('d-none');
@@ -302,7 +302,7 @@
                 }
             });
 
-            // Add click functionality to each location option
+            // ------------------------------------Add click functionality to each location option------------------------------------
             locationOptions.forEach(option => {
                 option.addEventListener('click', function() {
                     locationInput.value = this.textContent;
@@ -315,13 +315,13 @@
 
 
 
-            // Show dropdown when input is focused
+            // ---------------------------Show dropdown when input is focused---------------------------------
             locationInput.addEventListener('focus', function() {
                 locationDropdown.classList.remove('d-none');
                 locationToggle.style.transform = 'translateY(-50%) rotate(180deg)';
             });
 
-            // Hide dropdown when clicking outside
+            //----------------------------------------- Hide dropdown when clicking outside-----------------------
             document.addEventListener('click', function(e) {
                 if (!e.target.closest('.location-wrapper')) {
                     locationDropdown.classList.add('d-none');
@@ -335,7 +335,7 @@
 
 
 
-            // Filter options as user types
+            // ------------------------------------------Filter options as user types-----------------------------------
             locationInput.addEventListener('input', function() {
                 const searchTerm = this.value.toLowerCase();
                 locationOptions.forEach(option => {

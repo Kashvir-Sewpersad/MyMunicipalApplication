@@ -22,13 +22,13 @@
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-lg-8">
-                    <!-- Page Title -->
+                    <!---------------------------------------- Page Title --------------------------------------->
                     <div class="page-title">
                         <h1 class="glowing-text">Contact Us</h1>
                         <p class="subtitle">Get in touch with our municipal services team</p>
                     </div>
                     <div class="neon-card">
-                        <!-- Success Message -->
+                        <!------------------------------------ Success Message ------------------------------------>
                         @if (!string.IsNullOrEmpty(ViewBag.SuccessMessage))
                         {
                             <div class="neon-alert">
@@ -47,7 +47,7 @@
                         }
 
 
-                        <!-- Progress Section -->
+                        <!--------------------------------- Progress Section --------------------------------->
                         <div class="progress-section">
                             <div class="progress-header d-flex justify-content-between">
                                 <span class="progress-title">Form Completion</span>
@@ -58,7 +58,7 @@
                             </div>
                         </div>
 
-                        <!-- Milestones Section -->
+                        <!------------------------------------- Milestones Section --------------------------------->
                         <div class="milestone-section">
                             <h4 class="milestone-title">Progress Milestones</h4>
                             <div class="milestone-grid">
@@ -85,31 +85,31 @@
                             </div>
                         </div>
 
-                        <!-- Form Section -->
+                        <!-------------------------------------------------- Form Section -------------------------------->
                         <div class="form-section">
                             <form id="contactForm" asp-action="Contact" method="post">
-                                <!-- Name field -->
+                                <!---------------------------------------------- Name field ------------------------------------->
                                 <div class="neon-form-group">
                                     <label asp-for="Name" class="form-label">Full Name</label>
                                     <input asp-for="Name" type="text" class="neon-input form-control" placeholder="Enter your full name" required>
                                     <span asp-validation-for="Name" class="text-danger"></span>
                                 </div>
 
-                                <!-- Email field -->
+                                <!---------------------------------------------- Email field --------------------------------->
                                 <div class="neon-form-group">
                                     <label asp-for="Email" class="form-label">Email Address</label>
                                     <input asp-for="Email" type="email" class="neon-input form-control" placeholder="Enter your email address" required>
                                     <span asp-validation-for="Email" class="text-danger"></span>
                                 </div>
 
-                                <!-- Phone field (optional) -->
+                                <!------------------------------------------------ Phone field (optional) -------------------------------->
                                 <div class="neon-form-group">
                                     <label asp-for="Phone" class="form-label">Phone Number (Optional)</label>
                                     <input asp-for="Phone" type="tel" class="neon-input form-control" placeholder="Enter your phone number">
                                     <span asp-validation-for="Phone" class="text-danger"></span>
                                 </div>
 
-                                <!-- Category -->
+                                <!------------------------------------------------ Categor---------------------------------------------->
                                 <div class="neon-form-group">
                                     <label asp-for="Category" class="form-label">Category</label>
                                     <select asp-for="Category" class="neon-select form-control">
@@ -133,14 +133,14 @@
                                     <span asp-validation-for="Category" class="text-danger"></span>
                                 </div>
 
-                                <!-- Subject field -->
+                                <!---------------------------------------------- Subject field ----------------------------------->
                                 <div class="neon-form-group">
                                     <label asp-for="Subject" class="form-label">Subject</label>
                                     <input asp-for="Subject" type="text" class="neon-input form-control" placeholder="Brief subject of your message" required>
                                     <span asp-validation-for="Subject" class="text-danger"></span>
                                 </div>
 
-                                <!-- Message field -->
+                                <!-------------------------------------------- Message field --------------------------------------->
                                 <div class="neon-form-group">
                                     <label asp-for="Message" class="form-label">Message</label>
                                     <textarea asp-for="Message" class="neon-textarea form-control" rows="5" placeholder="Please provide details about your inquiry..." required></textarea>
@@ -156,7 +156,7 @@
                             </form>
                         </div>
 
-                        <!-- Footer BACK TO MAIN (INDEX / HOME ) -->
+                        <!------------------------------------------ Footer BACK TO MAIN (INDEX / HOME ) ------------------------------>
                         <a href="@Url.Action("Index", "Home")" id="backToMainBtn" class="btn rounded-pill px-4 py-2" style="background-color: #87CEEB; color: #000000; border: none;">
                             <i class="fas fa-arrow-left"></i> Back to Main Menu
                         </a>

@@ -27,12 +27,12 @@
         else
         {
             <div class="neon-card">
-                <!-- Search by ID -->
+                <!-- -----------------------------------Search by ID --------------------------------->
                 <div class="mb-3">
                     <input type="text" id="searchId" class="form-control neon-input" placeholder="Search by Request ID">
                 </div>
 
-                <!-- Table: Uses AVL-sorted data -->
+                <!------------------------------- Table: Uses AVL-sorted data ----------------------------->
                 <table class="table " style="background-color: #87CEEB;">
                     <thead>
                         <tr>
@@ -116,7 +116,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
     <script>
 
-        // Voting functionality
+        //---------------------------------------------- Voting ----------------------------------------------
         document.addEventListener('click', function(e) {
             if (e.target.closest('.vote-btn')) {
                 e.preventDefault();
@@ -124,7 +124,7 @@
                 const issueId = button.getAttribute('data-issue-id');
                 const voteType = button.getAttribute('data-vote-type');
 
-                // Disable button to prevent multiple clicks
+                // -----------------------------------------Disable button to prevent multiple clicks-----------------------------
                 button.disabled = true;
 
                 const url = voteType === 'upvote' ? '@Url.Action("UpvoteIssue", "Home")' : '@Url.Action("DownvoteIssue", "Home")';
@@ -138,7 +138,7 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        // Update vote counts
+                        //--------------------------------------------- Update vote counts--------------------------------------------
                         const row = button.closest('tr');
                         const upvoteSpan = row.querySelector('.upvote-count');
                         const downvoteSpan = row.querySelector('.downvote-count');
@@ -154,13 +154,13 @@
                     alert('An error occurred. Please try again.');
                 })
                 .finally(() => {
-                    // Re-enable button
+                    //-------------------------------------------- Re-enable button--------------------------------------
                     button.disabled = false;
                 });
             }
         });
 
-        // Search filter (client-side)
+        //------------------------------------------------ Search filter (client---)-------------------------------------------
         document.getElementById('searchId').addEventListener('input', function() {
             const filter = this.value;
             const rows = document.querySelectorAll('tbody tr');

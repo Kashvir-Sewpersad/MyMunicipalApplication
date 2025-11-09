@@ -95,7 +95,7 @@
     </style>
 </head>
 <body>
-    <!-- Animated background - hidden -->
+    <!----------------------------------------------------------- Animated background - hidden ------------------------------------------------>
     <div class="particles" style="display: none;">
         <div class="particle"></div>
         <div class="particle"></div>
@@ -115,7 +115,7 @@
                     <div class="page-title">
                         <h1 class="glowing-text">Local Events & Announcements</h1>
                         <p class="subtitle">Stay informed about what's happening in your community</p>
-                        <!-- Announcements Button -->
+                        <!------------------------------------------------- Announcements Button ----------------------------------------------->
                         <div class="text-center mt-3">
                             <button class="btn btn-outline-primary neon-button" onclick="scrollToAnnouncement()">
                                 <i class="fas fa-bullhorn"></i> Announcements
@@ -123,7 +123,7 @@
                         </div>
                     </div>
 
-                    <!-- Search and Filter Section -->
+                    <!------------------------------------------------ Search and Filter Section -------------------------------------->
                     <div class="neon-card mb-4">
                         <div class="row">
                             <div class="col-md-6">
@@ -163,7 +163,7 @@
                         </div>
                     </div>
 
-                    <!-- Recommended Events Section -->
+                    <!---------------------------------------------------------- Recommended Events Section ----------------------------------------->
                     @if (ViewBag.RecommendedEvents != null && ViewBag.RecommendedEvents.Count > 0)
                     {
                         <div class="recommended-section">
@@ -205,7 +205,7 @@
                         </div>
                     }
 
-                    <!-- Featured Events Section -->
+                    <!------------------------------------------------- Featured Events Section --------------------------------------->
                     @if (ViewBag.FeaturedEvents != null && ViewBag.FeaturedEvents.Count > 0)
                     {
                         <div class="featured-section">
@@ -247,7 +247,7 @@
                         </div>
                     }
 
-                    <!-- Upcoming Events Section -->
+                    <!------------------------------------------ Upcoming Events Section ------------------------------------->
                     @if (ViewBag.UpcomingEvents != null && ViewBag.UpcomingEvents.Count > 0)
                     {
                         <div class="upcoming-section">
@@ -289,7 +289,7 @@
                         </div>
                     }
 
-                    <!-- All Events Section -->
+                    <!-------------------------------------------- All Events Section ------------------------------------->
                     <div class="all-events-section">
                         <h3 class="section-title">All Events</h3>
 
@@ -347,8 +347,8 @@
                         }
                     </div>
 
-                    <!-- Back to Main Menu Button -->
-                    <!-- Important Announcements Section -->
+                    <!-- ----------------------------------------------------Back to Main Menu Button----------------------------------------- -->
+                    <!-- --------------------------------------------------- Announcements Section------------------------------------ -->
                     <div id="announcement" class="announcement-section">
                         <h3 class="section-title">Important Announcements</h3>
                         @if (ViewBag.Announcements != null && ViewBag.Announcements.Count > 0)
@@ -426,7 +426,7 @@
             const searchButton = document.getElementById('searchButton');
             const categoryFilter = document.getElementById('categoryFilter');
 
-            // Function to perform search
+            //---------------------------------------------------- Function to perform search------------------------------------------
             function performSearch() {
                 const searchTerm = searchInput.value.trim();
                 const category = categoryFilter.value;
@@ -459,22 +459,22 @@
                 window.location.href = url;
             }
 
-            // Search button click event
+            //---------------------------------------------------- Search button click event-------------------------------------------
             searchButton.addEventListener('click', performSearch);
 
-            // Enter key in search input
+            //----------------------------------------- Enter key in search input-------------------------------------------
             searchInput.addEventListener('keypress', function(e) {
                 if (e.key === 'Enter') {
                     performSearch();
                 }
             });
 
-            // Category filter change event
+            //-------------------------------------------------- Category filter change event------------------------------------
             categoryFilter.addEventListener('change', function() {
                 performSearch();
             });
 
-            // Voting functionality
+            //-------------------------------------- Voting functionality------------------------------------
             document.addEventListener('click', function(e) {
                 if (e.target.closest('.vote-btn')) {
                     e.preventDefault();
@@ -482,7 +482,7 @@
                     const eventId = button.getAttribute('data-event-id');
                     const voteType = button.getAttribute('data-vote-type');
 
-                    // Disable button to prevent multiple clicks
+                    // -----------------------------Disable button to prevent multiple clicks----------------------------------
                     button.disabled = true;
 
                     const url = voteType === 'upvote' ? '@Url.Action("UpvoteEvent", "Home")' : '@Url.Action("DownvoteEvent", "Home")';
@@ -496,7 +496,7 @@
                     .then(response => response.json())
                     .then(data => {
                         if (data.success) {
-                            // Update vote counts
+                            //--------------------------------- Update vote counts---------------------------
                             const eventCard = button.closest('.event-card');
                             const upvoteSpan = eventCard.querySelector('.upvote-count');
                             const downvoteSpan = eventCard.querySelector('.downvote-count');
@@ -512,13 +512,13 @@
                         alert('An error occurred. Please try again.');
                     })
                     .finally(() => {
-                        // Re-enable button
+                        //--------------------------------------- Re-enable button-----------------------------------
                         button.disabled = false;
                     });
                 }
             });
 
-            // Function to scroll to announcement
+            //-------------------------------------- Function to scroll to announcement------------------------------------
             window.scrollToAnnouncement = function() {
                 const announcement = document.getElementById('announcement');
                 if (announcement) {
