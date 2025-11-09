@@ -28,13 +28,13 @@ namespace Programming_7312_Part_1.Controllers
             _announcementService = announcementService;
         }
 
-        // GET: Admin/Login
+        // =====================GET: Admin/Login=====================================
         public IActionResult Login()
         {
             return View();
         }
 
-        // POST: Admin/Login
+        // ===================================POST: Admin/Login===========================================
         [HttpPost]
         public IActionResult Login(string password)
         {
@@ -57,21 +57,22 @@ namespace Programming_7312_Part_1.Controllers
             }
         }
 
-        // GET: Admin/Dashboard
+        // GET: ==================================Admin/Dashboard======================================
         public IActionResult Dashboard()
         {
+            // so  if a login was unsucessful the admin should be directed back to the login page 
             if (HttpContext.Session.GetString("AdminLoggedIn") != "true")
             {
                 return RedirectToAction("Login");
             }
 
-            ViewBag.Issues = _issueStorage.GetAllIssues();
+            ViewBag.Issues = _issueStorage.GetAllIssues(); // dispkays the issues 
             ViewBag.Events = _eventService.GetAllEvents(); // opens up the events 
             ViewBag.Announcements = _announcementService.GetAllAnnouncements(); // opens up all stored announcements 
             return View(); // displays on the admin view 
         }
 
-        // GET: Admin/EditEvent
+        // GET:===================================Admin/EditEvent================================
         public IActionResult EditEvent(int id)
         {
             if (HttpContext.Session.GetString("AdminLoggedIn") != "true")
@@ -91,7 +92,7 @@ namespace Programming_7312_Part_1.Controllers
             return View(eventItem);
         }
 
-        // GET: Admin/CreateEvent
+        // GET: ==============================Admin/CreateEvent=====================================
         public IActionResult CreateEvent()
         {
             if (HttpContext.Session.GetString("AdminLoggedIn") != "true")
@@ -119,7 +120,8 @@ namespace Programming_7312_Part_1.Controllers
 
             try
             {
-                // Validate category
+                // =====================Validate category=============================
+                
                 var validCategories = _eventService.UniqueCategories.ToList();
                 if (!validCategories.Contains(model.Category))
                 {
@@ -136,13 +138,14 @@ namespace Programming_7312_Part_1.Controllers
                     return View(model); // return model 
                 }
 
-                // Handle image upload
+                // =========================== Handler for the  image upload  process ================================
+                
                 if (imageFile != null && imageFile.Length > 0)
                 {
                     var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads"); // image path is in  the root images folder 
                     if (!Directory.Exists(uploadsFolder))
                     {
-                        Directory.CreateDirectory(uploadsFolder); // locatoion 
+                        Directory.CreateDirectory(uploadsFolder); // locatoion -----> currently i am storing it on a local folder called uploadsfolder in my project 
                     }
 
                     var uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(imageFile.FileName);
@@ -153,10 +156,16 @@ namespace Programming_7312_Part_1.Controllers
                         await imageFile.CopyToAsync(fileStream);
                     }
 
-                    model.ImagePath = "/uploads/" + uniqueFileName;
+                    model.ImagePath = "/uploads/" + uniqueFileName; // send under uploads 
                 }
 
-                // Parse tags
+                // ========================   Parse tags===========================
+                
+                /*
+                 *
+                 *the below code is to make sure there is no empty strings 
+                 * *
+                 */
                 if (!string.IsNullOrWhiteSpace(tagsInput))
                 {
                     model.Tags = tagsInput.Split(',')
@@ -168,16 +177,19 @@ namespace Programming_7312_Part_1.Controllers
                 {
                     model.Tags = new List<string>();
                 }
-
-                // Generate new ID
+ 
+                // ============================== Generate new ID ============================
+                
                 var allEvents = _eventService.GetAllEvents();
-                model.Id = allEvents.Any() ? allEvents.Max(e => e.Id) + 1 : 1; // previous id + 1 
+                model.Id = allEvents.Any() ? allEvents.Max(e => e.Id) + 1 : 1; // previous id + 1  (incrementations tp maointain special ids )
 
                 _eventService.AddEvent(model); // added to the model  
 
                 return RedirectToAction("Dashboard"); // takes the admin back to the dash 
             }
-            // exception handling added  
+            
+            // ========================  exception handling added  =============================  
+            
             catch (Exception ex)
             {
                 ModelState.AddModelError("", "An error occurred while creating the event. Please try again."); // error message 
@@ -187,7 +199,7 @@ namespace Programming_7312_Part_1.Controllers
             }
         }
 
-        // POST: Admin/EditEvent
+        // ============================================ POST: Admin/EditEvent ====================================
         [HttpPost]
         public IActionResult EditEvent(Event model, string tagsInput)
         {
@@ -198,11 +210,13 @@ namespace Programming_7312_Part_1.Controllers
 
             try
             {
-                // Validate category
+                //--------------------------- Validate category------------------------------
+                
+                
                 var validCategories = _eventService.UniqueCategories.ToList();
                 if (!validCategories.Contains(model.Category))
                 {
-                    ModelState.AddModelError("Category", "Please select a valid category from the dropdown."); // error message 
+                    ModelState.AddModelError("Category", "Please select a valid category from the dropdown."); // -------->  error message 
                     ViewBag.Categories = validCategories;
                     ViewBag.Tags = _eventService.UniqueTags.ToList();
                     ViewBag.TagsInput = string.Join(", ", model.Tags ?? new List<string>());
@@ -217,7 +231,7 @@ namespace Programming_7312_Part_1.Controllers
                     return View(model);
                 }
 
-                // Parse tags
+                // ===========================  Parse tags ======================================
                 if (!string.IsNullOrWhiteSpace(tagsInput))
                 {
                     model.Tags = tagsInput.Split(',')
@@ -252,7 +266,7 @@ namespace Programming_7312_Part_1.Controllers
             }
         }
 
-        // POST: Admin/DeleteEvent
+        // ============================= POST: Admin/DeleteEvent ==============================
         /*
          * the below method is to capture and update the functionality for deleting an event 
          *
@@ -279,7 +293,7 @@ namespace Programming_7312_Part_1.Controllers
             return RedirectToAction("Dashboard"); // back to dash 
         }
 
-        // GET: Admin/CreateAnnouncement
+        // ================================ GET: Admin/CreateAnnouncement =====================================
         
         /*
          *
@@ -298,7 +312,7 @@ namespace Programming_7312_Part_1.Controllers
             return View();
         }
 
-        // POST: Admin/CreateAnnouncement
+        // POST: ================================= Admin/CreateAnnouncement  ========================================= 
         [HttpPost]
         public IActionResult CreateAnnouncement(Announcement model)
         {
@@ -315,13 +329,13 @@ namespace Programming_7312_Part_1.Controllers
                     return View(model);
                 }
 
-                // Generate new ID
-                var allAnnouncements = _announcementService.GetAllAnnouncements();
-                model.Id = allAnnouncements.Any() ? allAnnouncements.Max(a => a.Id) + 1 : 1;
+                // =====================  Generate new ID =============================== 
+                 var allAnnouncements = _announcementService.GetAllAnnouncements();
+                model.Id = allAnnouncements.Any() ? allAnnouncements.Max(a => a.Id) + 1 : 1;   // ------------- > adds 1 to enssure the ids are diffrent  
 
                 _announcementService.AddAnnouncement(model);
 
-                return RedirectToAction("Dashboard");
+                return RedirectToAction("Dashboard"); // takes the admin bacck to the admin dash after completion of action 
             }
             catch (Exception ex)
             {
@@ -336,9 +350,11 @@ namespace Programming_7312_Part_1.Controllers
         /*
          *
          *
-         * the below method contains the 
+         * the below method contains the  delete actiono for the admin to remove an announcement
          *
-         * 
+         * this works based of the unique ID 
+         *
+         *  THERE ARE ERROR AND SUCESS MESSAGES FOR ux 
          */
         [HttpPost]
         public IActionResult DeleteAnnouncement(int id)
@@ -361,7 +377,7 @@ namespace Programming_7312_Part_1.Controllers
             return RedirectToAction("Dashboard");
         }
         
-        // POST: Admin/ApproveIssue
+        // POST: =================================== Admin/ApproveIssue ==========================================
         [HttpPost]
         public IActionResult ApproveIssue(int issueId, string comments)
         {
@@ -383,7 +399,7 @@ namespace Programming_7312_Part_1.Controllers
             return RedirectToAction("Dashboard");
         }
 
-        // POST: Admin/RejectIssue
+        // POST:========================================== Admin/RejectIssue ==========================================
         [HttpPost]
         public IActionResult RejectIssue(int issueId, string comments)
         {
@@ -405,7 +421,7 @@ namespace Programming_7312_Part_1.Controllers
             return RedirectToAction("Dashboard");
         }
 
-        // POST: Admin/DeleteIssue
+        // POST: =================================== Admin/DeleteIssue ========================================
         [HttpPost]
         public IActionResult DeleteIssue(int issueId, string comments)
         {
@@ -443,7 +459,7 @@ namespace Programming_7312_Part_1.Controllers
         public IActionResult Logout()
         {
             HttpContext.Session.Remove("AdminLoggedIn");
-            return RedirectToAction("Index", "Home"); //  admin is directed back to home page
+            return RedirectToAction("Index", "Home"); // -------------------->  admin is directed back to home page
         }
     }
 }
