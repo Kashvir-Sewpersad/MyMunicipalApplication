@@ -105,7 +105,9 @@ namespace Programming_7312_Part_1.Controllers
 
         
         /// Displays the report issues page with available categories.
-       
+        /// the below are hard coded to allow for a user to select from some prepopulated responses / catergoriess
+        /// this is done to help with the user experience
+        /// overall a nice feature and follows other government apps such as the city of cape town
         /// The ReportIssues view with a new Issue model.
         public IActionResult ReportIssues()
         {
@@ -140,6 +142,12 @@ namespace Programming_7312_Part_1.Controllers
         /// The Issue model containing the report details
         /// attachment">Optional file attachment for the issue.
         /// The ReportIssues view with success message or validation errors.
+        ///
+        ///
+        ///
+        /// the below are hard coded to allow for a user to select from some prepopulated responses / catergoriess
+        /// this is done to help with the user experience
+        /// overall a nice feature and follows other government apps such as the city of cape town
         [HttpPost]
         public async Task<IActionResult> ReportIssues(Issue model, IFormFile attachment)
         {
@@ -164,7 +172,7 @@ namespace Programming_7312_Part_1.Controllers
                 "unruly or inappropriate behaviour",
                 "unscheduled water supply disruptions",
                 "vagrants and illegal squatting"
-            }; // categories
+            }; 
 
             if (!ModelState.IsValid)
             {
@@ -425,7 +433,11 @@ namespace Programming_7312_Part_1.Controllers
             // Store contact message
             _contactService.AddContact(model);
 
-            // Send confirmation email
+            //*
+            //
+            // the below code is used to send the confirmation message. 
+            //
+            //**/
             await _emailService.SendContactConfirmationAsync(model.Email, model.Name, model.Subject, model.Message);
 
             ViewBag.SuccessMessage = "Your message has been sent successfully! A confirmation email has been sent to your email address.";
