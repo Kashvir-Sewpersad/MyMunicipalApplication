@@ -2,26 +2,32 @@
     ViewData["Title"] = "Create New Event";
 }
 
+<!------------------------------------------ Create Event Page Container -------------------------->
 <div class="report-container">
+    <!-------------------------------------- Page Title Section ----------------------------------------->
     <div class="page-title">
         <h1 class="glowing-text">Create New Event</h1>
         <p class="subtitle">Add a new event to the system</p>
     </div>
 
+    <!-------------------------------------------- Event Form Card ----------------------------------------->
     <div class="neon-card">
         <form method="post" enctype="multipart/form-data" action="/Admin/CreateEvent">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
+            <!------------------------------------- Title Input ----------------------------------------------->
             <div class="mb-3">
                 <label for="Title" class="form-label">Title</label>
                 <input id="Title" name="Title" class="form-control neon-input" required />
             </div>
 
+            <!---------------------------------------------- Description Textarea ---------------------------------------------->
             <div class="mb-3">
                 <label for="Description" class="form-label">Description</label>
                 <textarea id="Description" name="Description" class="form-control neon-input" rows="4" required></textarea>
             </div>
 
+            <!------------------------------------------------- Category Select ------------------------------------------------->
             <div class="mb-3">
                 <label for="Category" class="form-label">Category</label>
                 <select id="Category" name="Category" class="form-select neon-select" required>
@@ -36,16 +42,19 @@
                 </select>
             </div>
 
+            <!---------------------------------------------------- Event Date Input ----------------------------------------------------->
             <div class="mb-3">
                 <label for="EventDate" class="form-label">Event Date</label>
                 <input id="EventDate" name="EventDate" type="datetime-local" class="form-control neon-input" required min="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" />
             </div>
 
+            <!------------------------------------------------------ Location Input --------------------------------------------------------->
             <div class="mb-3">
                 <label for="Location" class="form-label">Location</label>
                 <input id="Location" name="Location" class="form-control neon-input" required />
             </div>
 
+            <!---------------------------------------------------- Image Upload Section --------------------------------------------------->
             <div class="mb-3">
                 <label class="form-label">Event Image</label>
                 <div id="drop-zone" class="drop-zone">
@@ -58,6 +67,7 @@
                 </div>
             </div>
 
+            <!-------------------------------------------------- Tags Select ---------------------------------------------------------->
             <div class="mb-3">
                 <label for="tagsInput" class="form-label">Tags</label>
                 <select id="tagsInput" name="tagsInput" class="form-select neon-select" multiple required>
@@ -72,6 +82,7 @@
                 <small class="form-text text-muted">Hold Ctrl (or Cmd on Mac) to select multiple tags</small>
             </div>
 
+            <!--------------------------------------------------------- Form Buttons --------------------------------------------------->
             <div class="d-flex gap-2">
                 <button type="submit" class="btn btn-primary neon-button" id="submitBtn" disabled>Create Event</button>
                 <a asp-action="Dashboard" class="btn btn-outline-secondary neon-button">Cancel</a>
@@ -105,18 +116,18 @@
                 submitBtn.disabled = !allFilled;
             }
 
-            // Click to select file
+            // ------------------------------Click to select file-------------------------------------
             dropZone.addEventListener('click', function() {
                 fileInput.click();
             });
 
-            // File input change
+            //---------------------------- File input change----------------------------------------------
             fileInput.addEventListener('change', function(e) {
                 handleFile(e.target.files[0]);
                 checkFormValidity();
             });
 
-            // Drag and drop events
+            // -----------------------Drag and drop events------------------------------------------------------
             dropZone.addEventListener('dragover', function(e) {
                 e.preventDefault();
                 dropZone.classList.add('dragover');
@@ -137,7 +148,7 @@
                 }
             });
 
-            // Remove image
+            //---------------------------- Remove image-------------------------------------------------
             removeBtn.addEventListener('click', function() {
                 fileInput.value = '';
                 preview.style.display = 'none';
@@ -145,7 +156,7 @@
                 checkFormValidity();
             });
 
-            // Add input event listeners to required fields
+            //----------------------------------------- Add input event listeners to required fields-------------------------------------------
             requiredFields.forEach(fieldId => {
                 if (fieldId !== 'imageFile') {
                     const field = document.getElementById(fieldId);
@@ -167,7 +178,7 @@
                 }
             }
 
-            // Initial check
+            // -----------------------------------------Initial check-----------------------------------------
             checkFormValidity();
         });
     </script>

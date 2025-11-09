@@ -2,30 +2,37 @@
     ViewData["Title"] = "Edit Event";
 }
 
+<!--------------------------------------------- Edit Event Page Container ---------------------------------------->
 <div class="report-container">
+    <!--------------------------------------------- Page Title Section -------------------------------------------->
     <div class="page-title">
         <h1 class="glowing-text">Edit Event</h1>
         <p class="subtitle">Modify event details</p>
     </div>
 
+    <!------------------------------------------- Edit Event Form Card -------------------------------------------->
     <div class="neon-card">
         <form method="post" action="/Admin/EditEvent">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
+            <!--------------------------------- Hidden Fields for Event ID and Metadata ------------------------>
             <input type="hidden" id="Id" name="Id" />
             <input type="hidden" id="CreatedDate" name="CreatedDate" />
             <input type="hidden" id="ViewCount" name="ViewCount" />
 
+            <!---------------------------------------- Title Input ----------------------------------------->
             <div class="mb-3">
                 <label for="Title" class="form-label">Title</label>
                 <input id="Title" name="Title" class="form-control neon-input" />
             </div>
 
+            <!-------------------------------------- Description Textarea ------------------------------->
             <div class="mb-3">
                 <label for="Description" class="form-label">Description</label>
                 <textarea id="Description" name="Description" class="form-control neon-input" rows="4"></textarea>
             </div>
 
+            <!------------------------------------ Category Select ----------------------------------------->
             <div class="mb-3">
                 <label for="Category" class="form-label">Category</label>
                 <select id="Category" name="Category" class="form-select neon-select" required>
@@ -40,21 +47,25 @@
                 </select>
             </div>
 
+            <!----------------------------------- Event Date Input -------------------------------->
             <div class="mb-3">
                 <label for="EventDate" class="form-label">Event Date</label>
                 <input id="EventDate" name="EventDate" type="datetime-local" class="form-control neon-input" min="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" />
             </div>
 
+            <!---------------------------------- Location Input ----------------------------------->
             <div class="mb-3">
                 <label for="Location" class="form-label">Location</label>
                 <input id="Location" name="Location" class="form-control neon-input" />
             </div>
 
+            <!-- -----------------------------Image Path Input --------------------------------------->
             <div class="mb-3">
                 <label for="ImagePath" class="form-label">Image Path (optional)</label>
                 <input id="ImagePath" name="ImagePath" class="form-control neon-input" placeholder="Leave empty for default image" />
             </div>
 
+            <!-- --------------------------------Tags Select---------------------------------------- -->
             <div class="mb-3">
                 <label for="tagsInput" class="form-label">Tags</label>
                 <select id="tagsInput" name="tagsInput" class="form-select neon-select" multiple required>
@@ -69,6 +80,7 @@
                 <small class="form-text text-muted">Hold Ctrl (or Cmd on Mac) to select multiple tags</small>
             </div>
 
+            <!---------------------------------- Form Buttons------------------------------- -->
             <div class="d-flex gap-2">
                 <button type="submit" class="btn btn-primary neon-button">Save Changes</button>
                 <a asp-action="Dashboard" class="btn btn-outline-secondary neon-button">Cancel</a>
@@ -77,13 +89,15 @@
     </div>
 </div>
 
+<!-- ----------------------------------------------Scripts Section --------------------------------->
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+    <!-- ----------------------------------------JavaScript ----------------------------------->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Pre-select existing tags
+            //----------------------------------- Pre-select ----------------------------------//
             const tagsInput = document.getElementById('tagsInput');
             const existingTags = '@ViewBag.TagsInput'.split(', ').map(t => t.trim()).filter(t => t);
 

@@ -4,26 +4,32 @@
 
 @model Programming_7312_Part_1.Models.Announcement
 
+<!---------------------------------------------------------- Create Announcement Page Container -------------------------------------->
 <div class="report-container">
+    <!----------------------------------------------------------- Page Title Section ------------------------------------------->
     <div class="page-title">
         <h1 class="glowing-text">Create New Announcement</h1>
         <p class="subtitle">Add an important announcement for the community</p>
     </div>
 
+    <!--------------------------------------------------------- Announcement Form Card ------------------------->
     <div class="neon-card">
         <form method="post" action="@Url.Action("CreateAnnouncement")" asp-antiforgery="true">
+            <!------------------------------------------------------ Title Input------------------------------------------>
             <div class="mb-3">
                 <label for="Title" class="form-label">Title</label>
                 <input type="text" class="form-control neon-input" id="Title" name="Title" required maxlength="200">
                 <span asp-validation-for="Title" class="text-danger"></span>
             </div>
 
+            <!---------------------------------------------------- Content Textarea -------------------------------->
             <div class="mb-3">
                 <label for="Content" class="form-label">Content</label>
                 <textarea class="form-control neon-input" id="Content" name="Content" rows="5" required maxlength="2000"></textarea>
                 <span asp-validation-for="Content" class="text-danger"></span>
             </div>
 
+            <!------------------------------------------------- Category Input with Datalist ------------------------------->
             <div class="mb-3">
                 <label for="Category" class="form-label">Category</label>
                 <input type="text" class="form-control neon-input" id="Category" name="Category" list="categoryList">
@@ -42,6 +48,7 @@
                 </datalist>
             </div>
 
+            <!------------------------------------------------- Priority Select ------------------------------------------->
             <div class="mb-3">
                 <label for="Priority" class="form-label">Priority</label>
                 <select class="form-select neon-select" id="Priority" name="Priority" required>
@@ -51,17 +58,20 @@
                 </select>
             </div>
 
+            <!------------------------------------------------------- Expiry Date Input -------------------------------------->
             <div class="mb-3">
                 <label for="ExpiryDate" class="form-label">Expiry Date (Optional)</label>
                 <input type="datetime-local" class="form-control neon-input" id="ExpiryDate" name="ExpiryDate" value="">
                 <small class="form-text text-muted">Leave empty for no expiry</small>
             </div>
 
+            <!------------------------------------------------------ Active Checkbox ------------------------------------->
             <div class="mb-3 form-check">
                 <input type="checkbox" class="form-check-input" id="IsActive" name="IsActive" checked>
                 <label class="form-check-label" for="IsActive">Active</label>
             </div>
 
+            <!--------------------------------------------- Form Buttons ------------------------------------------>
             <div class="d-flex gap-2">
                 <button type="submit" class="btn btn-primary neon-button">Create Announcement</button>
                 <a href="@Url.Action("Dashboard", "Admin")" class="btn btn-outline-light neon-button">Cancel</a>

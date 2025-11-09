@@ -2,14 +2,18 @@
     ViewData["Title"] = "Admin Login";
 }
 
+<!------------------------------------ Admin Login Page Container ---------------------------->
 <div class="report-container">
+    <!-- Page Title Section -->
     <div class="page-title">
         <h1 class="glowing-text">Admin Login</h1>
         <p class="subtitle">Enter the password to access the dashboard</p>
     </div>
 
+    <!----------------------------------- Login Form Card --------------------------------------------->
     <div class="neon-card" style="margin-top: 2rem;">
         <form method="post" class="form-section">
+            <!-- Password Input Group -->
             <div class="neon-form-group">
                 <label for="password" class="form-label">Password</label>
                 <div class="input-group">
@@ -20,6 +24,7 @@
                 </div>
             </div>
 
+            <!-------------------------- Error Message Display ------------------------------------------>
             @if (ViewBag.Error != null)
             {
                 <div class="alert alert-danger">
@@ -27,11 +32,13 @@
                 </div>
             }
 
+            <!------------------------ Submit Button ---------------------------------------->
             <button type="submit" class="neon-button">Login</button>
         </form>
     </div>
 </div>
 
+<!----------------------------------- JavaScript for Toggle ------------------------------->
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const togglePassword = document.getElementById('togglePassword');

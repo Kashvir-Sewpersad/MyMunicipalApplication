@@ -2,17 +2,22 @@
     ViewData["Title"] = "Admin Dashboard";
 }
 
+<!-------------------------------------- Admin Dashboard Page Container -------------------------------------->
 <div class="report-container">
+    <!---------------------------------- Page Title Section ---------------------------------------------------------->
     <div class="page-title">
         <h1 class="glowing-text">Admin Dashboard</h1>
         <p class="subtitle">Manage reported issues and events</p>
     </div>
 
+    <!------------------------------------- Main Dashboard Card ------------------------------------------------------>
     <div class="neon-card">
+        <!-- Logout Form -->
         <form method="post" action="@Url.Action("Logout")" style="text-align: right; margin-bottom: 2rem;">
             <button type="submit" class="back-btn">Logout</button>
         </form>
 
+        <!------------------------------------- Reported Issues Section ---------------------------------------------->
         <h2>Reported Issues</h2>
         @if (TempData["Success"] != null)
         {
@@ -53,14 +58,17 @@
                     <td>
                         @if (issue.Status == "Pending")
                         {
+                            <!----------------------------- Approve Issue Form ------------------------------>
                             <form method="post" action="@Url.Action("ApproveIssue", "Admin")" style="display: inline;" onsubmit="return confirm('Are you sure you want to approve this issue?');">
                                 <input type="hidden" name="issueId" value="@issue.Id" />
                                 <button type="submit" class="btn btn-sm btn-success me-1">Approve</button>
                             </form>
+                            <!-------------------------------- Reject Issue Form ------------------------------>
                             <form method="post" action="@Url.Action("RejectIssue", "Admin")" style="display: inline;" onsubmit="return confirm('Are you sure you want to reject this issue?');">
                                 <input type="hidden" name="issueId" value="@issue.Id" />
                                 <button type="submit" class="btn btn-sm btn-warning me-1">Reject</button>
                             </form>
+                            <!----------------------------- Delete Issue Form ------------------------------------->
                             <form method="post" action="@Url.Action("DeleteIssue", "Admin")" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this issue?');">
                                 <input type="hidden" name="issueId" value="@issue.Id" />
                                 <button type="submit" class="btn btn-sm btn-danger">Delete</button>
@@ -76,7 +84,7 @@
             </tbody>
         </table>
 
-
+        <!---------------------------------------------------- Announcements Section -------------------------------->
         <h2 style="margin-top: 3rem;">Announcements</h2>
         <div style="margin-bottom: 1rem;">
             <a href="@Url.Action("CreateAnnouncement", "Admin")" class="btn btn-primary neon-button">Add New Announcement</a>
@@ -121,6 +129,7 @@
                     </td>
                     <td>@announcement.CreatedDate.ToString("yyyy-MM-dd")</td>
                     <td>
+                        <!--------------------------------------------------- Delete Announcement Form ---------------------------------------------->
                         <form method="post" action="@Url.Action("DeleteAnnouncement", "Admin")" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this announcement?');">
                             <input type="hidden" name="id" value="@announcement.Id" />
                             <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
@@ -131,6 +140,7 @@
             </tbody>
         </table>
 
+        <!---------------------------- Events Section--------------------------------- -->
         <h2 style="margin-top: 3rem;">Events</h2>
         <div style="margin-bottom: 1rem;">
             <a href="@Url.Action("CreateEvent", "Admin")" class="btn btn-primary neon-button">Add New Event</a>
@@ -163,6 +173,7 @@
                     <td>@eventItem.Location</td>
                     <td>
                         <a href="@Url.Action("EditEvent", "Admin", new { id = eventItem.Id })" class="btn btn-sm btn-outline-primary">Edit</a>
+                        <!------------------------------------------------ Delete Event Form ---------------------------------------->
                         <form method="post" action="@Url.Action("DeleteEvent", "Admin")" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this event?');">
                             <input type="hidden" name="id" value="@eventItem.Id" />
                             <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
@@ -174,5 +185,3 @@
         </table>
     </div>
 </div>
-
-
