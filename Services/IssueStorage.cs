@@ -173,25 +173,25 @@ public class AVLTree<T>
     }
 }
 
-// ============================  Graph for dependencies ================================ 
+// ============================  Graph for dependencies ================================
 public class ServiceRequestGraph
 {
-    private Dictionary<int, List<int>> adjacencyList = new Dictionary<int, List<int>>();
+    private Dictionary<int, List<(int toId, int weight)>> adjacencyList = new Dictionary<int, List<(int, int)>>();
 
-    public void AddDependency(int fromId, int toId)
+    public void AddDependency(int fromId, int toId, int weight = 1)
     {
         if (!adjacencyList.ContainsKey(fromId))
-            adjacencyList[fromId] = new List<int>();
-        if (!adjacencyList[fromId].Contains(toId))
-            adjacencyList[fromId].Add(toId);
+            adjacencyList[fromId] = new List<(int, int)>();
+        if (!adjacencyList[fromId].Any(e => e.toId == toId))
+            adjacencyList[fromId].Add((toId, weight));
     }
 
     public List<int> GetDependencies(int issueId)
     {
-        return adjacencyList.GetValueOrDefault(issueId, new List<int>());
+        return adjacencyList.GetValueOrDefault(issueId, new List<(int, int)>()).Select(e => e.Item1).ToList();
     }
 
-    // =================================== BFS Traversal for dependency path ===================================== 
+    // =================================== BFS Traversal for dependency path =====================================
     public List<int> GetDependencyPath(int startId)
     {
         var visited = new HashSet<int>();
@@ -215,6 +215,71 @@ public class ServiceRequestGraph
             }
         }
         return path;
+    }
+
+    // =================================== Minimum Spanning Tree using Kruskal's Algorithm =====================================
+    public List<(int from, int to, int weight)> GetMinimumSpanningTree()
+    {
+        var edges = new List<(int from, int to, int weight)>();
+        foreach (var kvp in adjacencyList)
+        {
+            foreach (var edge in kvp.Value)
+            {
+                edges.Add((kvp.Key, edge.toId, edge.weight));
+            }
+        }
+
+        // =================================Sort edges by weight================================
+        edges.Sort((a, b) => a.weight.CompareTo(b.weight));
+
+        var parent = new Dictionary<int, int>();
+        var rank = new Dictionary<int, int>();
+
+        // ===================================Initialize Union====================================
+        foreach (var node in adjacencyList.Keys.Concat(adjacencyList.Values.SelectMany(l => l.Select(e => e.toId))))
+        {
+            if (!parent.ContainsKey(node))
+            {
+                parent[node] = node;
+                rank[node] = 0;
+            }
+        }
+
+        var mst = new List<(int from, int to, int weight)>();
+
+        foreach (var edge in edges)
+        {
+            int rootFrom = Find(parent, edge.from);
+            int rootTo = Find(parent, edge.to);
+
+            if (rootFrom != rootTo)
+            {
+                mst.Add(edge);
+                Union(parent, rank, rootFrom, rootTo);
+            }
+        }
+
+        return mst;
+    }
+
+    private int Find(Dictionary<int, int> parent, int node)
+    {
+        if (parent[node] != node)
+            parent[node] = Find(parent, parent[node]);
+        return parent[node];
+    }
+
+    private void Union(Dictionary<int, int> parent, Dictionary<int, int> rank, int root1, int root2)
+    {
+        if (rank[root1] > rank[root2])
+            parent[root2] = root1;
+        else if (rank[root1] < rank[root2])
+            parent[root1] = root2;
+        else
+        {
+            parent[root2] = root1;
+            rank[root1]++;
+        }
     }
 }
 

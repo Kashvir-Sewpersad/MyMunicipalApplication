@@ -198,6 +198,14 @@ Select "Set as Startup Project"
  *  the images (not required as per poe ) displaying on local events are not static at the moment --> i tried to have it so when a user loggs into the system they can see diffrent events each time, this has colided with the recomendation and i made a mess of it
  *  the admin cannont add an event if the active box is ticked ( not required as per poe )
  *  the recomendation algorithm does not display searched event right on top of the paage, it is displaying correctly, just not at the right position on the page 
+### IssueStorage.cs (Services/IssueStorage.cs)
+- **BinarySearchTree<Issue> BstById**: Organizes issues by ID for O(log n) retrieval.
+- **AVLTree<Issue> AvlByDate**: Self-balancing tree for date-based sorting, ensuring O(log n) insertions and traversals.
+- **SortedSet<Issue> RedBlackByCategory**: Red-Black tree for category-based sorting and filtering.
+- **PriorityQueue<Issue, int> HeapByPriority**: Max-heap (via negated upvotes) for prioritizing issues by community votes.
+- **ServiceRequestGraph Graph**: Adjacency list graph for modeling issue dependencies, supporting BFS traversal and MST computation.
+- **GetMinimumSpanningTree**: Kruskal's algorithm implementation to find the minimum cost dependency network, optimizing resource allocation for issue resolution.
+
 
    ### Data structures used in part 2 
 ### EventService.cs (Services/EventService.cs)
