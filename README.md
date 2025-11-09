@@ -211,7 +211,8 @@ Right-click solution → "Restore NuGet Packages"
 ### This project makes use of SQlite database, the configuration is done in appsettings.json
 ### There is an automatic email responder api added to the code. the details shall removed for security reasons
 ### To access and use the admin dashboard, use the hardcoded password ----- > 1234
-### YouTube link as proof of functionality  : 
+### YouTube link as proof of functionality (POE)  : https://youtu.be/RJtLioPy0R0
+### GitHub link (CURRENT POE before transfer) : https://github.com/Kashvir-Sewpersad/PROG7312_POE_ST10257503.git
 
 ### Data stuctures & Algorythms used 
 
@@ -250,6 +251,9 @@ Right-click solution → "Restore NuGet Packages"
         SQLite is used for persistence, but in-memory data structures handle runtime operations.
         seeded data is added for the first start up then as admin and users perform actions, that data is sent to back end and then to the SQLite
         I have tried to maintain good coding practices throughout the development cycle 
+
+    This program makes use of functional API calls. when a user submits via the contact form or reports an issue, a confromation email is sent to their gmail inbox. 
+    For the report issue feature, the confirmation email shall contain the traccking number which can be used to follow up on the progress via the search bar located on the "Service Status" page 
 
 
 
