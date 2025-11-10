@@ -312,6 +312,8 @@ Right-click solution → "Restore NuGet Packages"
  * https://chatgpt.com/share/68ee814e-ddfc-8010-b2fa-da3e1cbcbd9f
  * https://chatgpt.com/share/68ee83d0-6d94-8010-995f-c50d8a2bc85b
  * https://chatgpt.com/share/6911020a-f5b4-8010-9ab0-aa97e036661d
+ * https://chatgpt.com/share/6911d34e-5ae4-8010-8d54-0fb84fc289e5
+ * https://chatgpt.com/share/6911d3be-08d0-8010-882a-0cda861ab809
  
  
  *  -------------current issues --> TO BE FIXED IN PART 3 OR REMOVED IN PART 3 ------------
