@@ -1,4 +1,4 @@
-﻿pdate@model Programming_7312_Part_1.Models.Issue
+﻿@model Programming_7312_Part_1.Models.Issue
 
 @{
     ViewData["Title"] = "Report Issues";
@@ -439,6 +439,8 @@
                     }
                 });
             }
+            // Update progress when file is selected
+            fileInput.addEventListener('change', updateProgress);
 
             form.addEventListener('submit', function(e) {
                 submitBtn.disabled = true;
