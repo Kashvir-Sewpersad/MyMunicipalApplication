@@ -280,7 +280,11 @@ namespace Programming_7312_Part_1.Controllers
 
                 ViewBag.UpcomingEvents = _eventService.GetUpcomingEvents(3);
                 ViewBag.FeaturedEvents = _eventService.GetFeaturedEvents(3);
-                ViewBag.RecommendedEvents = _eventService.GetRecommendedEvents(3);
+
+                // Get recommended events excluding the searched events
+                var searchedEventIds = events.Select(e => e.Id).ToHashSet();
+                var allRecommended = _eventService.GetRecommendedEvents(10); // Get more to filter
+                ViewBag.RecommendedEvents = allRecommended.Where(e => !searchedEventIds.Contains(e.Id)).Take(3).ToList();
             }
             else
             {

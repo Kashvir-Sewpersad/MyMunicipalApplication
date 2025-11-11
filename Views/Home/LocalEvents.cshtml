@@ -163,11 +163,60 @@
                         </div>
                     </div>
 
+                    <!---------------------------------------------------------- Searched Events Section ----------------------------------------->
+                    @if (!string.IsNullOrEmpty(ViewBag.SearchTerm) && Model != null && Model.Count > 0)
+                    {
+                        <div class="searched-section">
+                            <h3 class="section-title">Search Results for "@ViewBag.SearchTerm"</h3>
+                            <div class="row">
+                                @foreach (var eventItem in Model)
+                                {
+                                    <div class="col-md-4">
+                                        <div class="event-card neon-card">
+                                            <div class="position-relative">
+                                                <img src="~/Images/@(images[imageIndex++ % images.Length])" class="event-image" alt="@eventItem.Title">
+                                                <div class="event-date-badge">
+                                                    <i class="far fa-calendar-alt"></i> @eventItem.EventDate.ToString("MMM dd")
+                                                </div>
+                                            </div>
+                                            <div class="p-3">
+                                                <h5>@eventItem.Title</h5>
+                                                <p class="text-muted small">
+                                                    <i class="fas fa-map-marker-alt"></i> @eventItem.Location
+                                                </p>
+                                                <p class="card-text">@(eventItem.Description.Length > 100 ? eventItem.Description.Substring(0, 100) + "..." : eventItem.Description)</p>
+                                                <div class="mb-2">
+                                                    <span class="event-tag">@eventItem.Category</span>
+                                                    @if (eventItem.Tags != null && eventItem.Tags.Count > 0)
+                                                    {
+                                                        foreach (var tag in eventItem.Tags.Take(2))
+                                                        {
+                                                            <span class="event-tag">@tag</span>
+                                                        }
+                                                    }
+                                                </div>
+                                                <div class="mb-2 d-flex align-items-center">
+                                                    <button class="btn btn-sm btn-success me-2 vote-btn" data-event-id="@eventItem.Id" data-vote-type="upvote">
+                                                        <i class="fas fa-thumbs-up"></i> <span class="upvote-count">@eventItem.Upvotes</span>
+                                                    </button>
+                                                    <button class="btn btn-sm btn-danger vote-btn" data-event-id="@eventItem.Id" data-vote-type="downvote">
+                                                        <i class="fas fa-thumbs-down"></i> <span class="downvote-count">@eventItem.Downvotes</span>
+                                                    </button>
+                                                </div>
+                                                <a href="#" class="btn btn-sm btn-outline-primary neon-button">View Details</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    }
+
                     <!---------------------------------------------------------- Recommended Events Section ----------------------------------------->
                     @if (ViewBag.RecommendedEvents != null && ViewBag.RecommendedEvents.Count > 0)
                     {
                         <div class="recommended-section">
-                            <h3 class="section-title">Recommended For You</h3>
+                            <h3 class="section-title">@(string.IsNullOrEmpty(ViewBag.SearchTerm) ? "Recommended For You" : "You Might Also Like")</h3>
                             <div class="row">
                                 @foreach (var eventItem in ViewBag.RecommendedEvents)
                                 {
@@ -290,62 +339,65 @@
                     }
 
                     <!-------------------------------------------- All Events Section ------------------------------------->
-                    <div class="all-events-section">
-                        <h3 class="section-title">All Events</h3>
+                    @if (string.IsNullOrEmpty(ViewBag.SearchTerm))
+                    {
+                        <div class="all-events-section">
+                            <h3 class="section-title">All Events</h3>
 
-                        @if (Model.Count == 0)
-                        {
-                            <div class="no-events">
-                                <i class="fas fa-calendar-times fa-3x mb-3"></i>
-                                <h4>No events found</h4>
-                                <p>Try adjusting your search or filter criteria</p>
-                            </div>
-                        }
-                        else
-                        {
-                            <div class="row">
-                                @foreach (var eventItem in Model)
-                                {
-                                    <div class="col-md-4">
-                                        <div class="event-card neon-card">
-                                            <div class="position-relative">
-                                                <img src="~/Images/@(images[imageIndex++ % images.Length])" class="event-image" alt="@eventItem.Title">
-                                                <div class="event-date-badge">
-                                                     <i class="far fa-calendar-alt"></i> @eventItem.EventDate.ToString("MMM dd")
-                                                 </div>
-                                            </div>
-                                            <div class="p-3">
-                                                <h5>@eventItem.Title</h5>
-                                                <p class="text-muted small">
-                                                    <i class="fas fa-map-marker-alt"></i> @eventItem.Location
-                                                </p>
-                                                <p class="card-text">@(eventItem.Description.Length > 100 ? eventItem.Description.Substring(0, 100) + "..." : eventItem.Description)</p>
-                                                <div class="mb-2">
-                                                    <span class="event-tag">@eventItem.Category</span>
-                                                    @if (eventItem.Tags != null && eventItem.Tags.Count > 0)
-                                                    {
-                                                        foreach (var tag in eventItem.Tags.Take(2))
+                            @if (Model.Count == 0)
+                            {
+                                <div class="no-events">
+                                    <i class="fas fa-calendar-times fa-3x mb-3"></i>
+                                    <h4>No events found</h4>
+                                    <p>Try adjusting your search or filter criteria</p>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="row">
+                                    @foreach (var eventItem in Model)
+                                    {
+                                        <div class="col-md-4">
+                                            <div class="event-card neon-card">
+                                                <div class="position-relative">
+                                                    <img src="~/Images/@(images[imageIndex++ % images.Length])" class="event-image" alt="@eventItem.Title">
+                                                    <div class="event-date-badge">
+                                                         <i class="far fa-calendar-alt"></i> @eventItem.EventDate.ToString("MMM dd")
+                                                     </div>
+                                                </div>
+                                                <div class="p-3">
+                                                    <h5>@eventItem.Title</h5>
+                                                    <p class="text-muted small">
+                                                        <i class="fas fa-map-marker-alt"></i> @eventItem.Location
+                                                    </p>
+                                                    <p class="card-text">@(eventItem.Description.Length > 100 ? eventItem.Description.Substring(0, 100) + "..." : eventItem.Description)</p>
+                                                    <div class="mb-2">
+                                                        <span class="event-tag">@eventItem.Category</span>
+                                                        @if (eventItem.Tags != null && eventItem.Tags.Count > 0)
                                                         {
-                                                            <span class="event-tag">@tag</span>
+                                                            foreach (var tag in eventItem.Tags.Take(2))
+                                                            {
+                                                                <span class="event-tag">@tag</span>
+                                                            }
                                                         }
-                                                    }
+                                                    </div>
+                                                    <div class="mb-2 d-flex align-items-center">
+                                                        <button class="btn btn-sm btn-success me-2 vote-btn" data-event-id="@eventItem.Id" data-vote-type="upvote">
+                                                            <i class="fas fa-thumbs-up"></i> <span class="upvote-count">@eventItem.Upvotes</span>
+                                                        </button>
+                                                        <button class="btn btn-sm btn-danger vote-btn" data-event-id="@eventItem.Id" data-vote-type="downvote">
+                                                            <i class="fas fa-thumbs-down"></i> <span class="downvote-count">@eventItem.Downvotes</span>
+                                                        </button>
+                                                    </div>
+                                                    <a href="#" class="btn btn-sm btn-outline-primary neon-button">View Details</a>
                                                 </div>
-                                                <div class="mb-2 d-flex align-items-center">
-                                                    <button class="btn btn-sm btn-success me-2 vote-btn" data-event-id="@eventItem.Id" data-vote-type="upvote">
-                                                        <i class="fas fa-thumbs-up"></i> <span class="upvote-count">@eventItem.Upvotes</span>
-                                                    </button>
-                                                    <button class="btn btn-sm btn-danger vote-btn" data-event-id="@eventItem.Id" data-vote-type="downvote">
-                                                        <i class="fas fa-thumbs-down"></i> <span class="downvote-count">@eventItem.Downvotes</span>
-                                                    </button>
-                                                </div>
-                                                <a href="#" class="btn btn-sm btn-outline-primary neon-button">View Details</a>
                                             </div>
                                         </div>
-                                    </div>
-                                }
-                            </div>
-                        }
-                    </div>
+                                    }
+                                </div>
+                            }
+                        </div>
+                    }
 
                     <!-- ----------------------------------------------------Back to Main Menu Button----------------------------------------- -->
                     <!-- --------------------------------------------------- Announcements Section------------------------------------ -->
