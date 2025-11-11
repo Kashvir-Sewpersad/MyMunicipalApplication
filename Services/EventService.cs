@@ -332,24 +332,29 @@ namespace Programming_7312_Part_1.Services
         public LinkedList<Event> SearchEvents(string searchTerm)
         {
             if (string.IsNullOrWhiteSpace(searchTerm)) // check for empty or whitespace
-            
+
                 return GetAllEvents(); // return all events if search term is empty
 
-            RecordSearch(searchTerm); // record the search term into the system 
+            RecordSearch(searchTerm); // record the search term into the system
 
-            searchTerm = searchTerm.ToLower().Trim(); // lower case and remove white spaces ffor trailing and leading 
+            searchTerm = searchTerm.ToLower().Trim(); // lower case and remove white spaces ffor trailing and leading
 
             var matchingEvents = _context.Events
                 .AsEnumerable()
-                .Where(e => e.Title.ToLower().Contains(searchTerm))
-                .ToList(); // search in title
+                .Where(e =>
+                    e.Title.ToLower().Contains(searchTerm) ||
+                    e.Description.ToLower().Contains(searchTerm) ||
+                    e.Category.ToLower().Contains(searchTerm) ||
+                    e.Location.ToLower().Contains(searchTerm) ||
+                    (e.Tags != null && e.Tags.Any(tag => tag.ToLower().Contains(searchTerm))))
+                .ToList(); // search across multiple fields
 
             // Increment SearchCount for matching events
             foreach (var eventItem in matchingEvents)
             {
                 eventItem.SearchCount++; // increment search count
             }
-            _context.SaveChanges(); // save 
+            _context.SaveChanges(); // save
 
             return new LinkedList<Event>(matchingEvents.OrderBy(e => e.EventDate));
         }
