@@ -7,6 +7,32 @@ using System.Collections.Generic;
 using System.Linq;
 using System;
 
+
+/**
+ * referemces
+ *
+ * 
+
+- GeeksforGeeks (2024). Queue Data Structure. [online] GeeksforGeeks. Available at: https://www.geeksforgeeks.org/dsa/queue-data-structure/.
+
+- GeeksforGeeks (2024). Stack Data Structure. [online] GeeksforGeeks. Available at: https://www.geeksforgeeks.org/dsa/stack-data-structure/.
+
+- Sajjaad Khader (2025). Data Structures Explained for Beginners - How I Wish I was Taught. [online] YouTube. Available at: https://www.youtube.com/watch?v=O9v10jQkm5c.
+
+- Code With RaiGenics (2021). Sorted list and sorted dictionary in C# | C# Collection Part 8. [online] YouTube. Available at: https://www.youtube.com/watch?v=QGw9ozFgSw0.
+
+- Tech With RGenics (2021). C# List with example | List in C# | C# Collection Part 5. [online] YouTube. Available at: https://www.youtube.com/watch?v=bJEVvhcW8GU [Accessed 8 Oct. 2025].
+
+- Tech With RGenics (2021). Stack in C# with real time example | C# Collection Part 10. [online] YouTube. Available at: https://www.youtube.com/watch?v=lzfNSP0DYeE&list=PL_xlJum5pRdDC-SCtuLI0D_m4KJcIsCLq&index=10 [Accessed 8 Oct. 2025].
+
+- Tech With RGenics (2021). C# Collection Best Practices | Collection in C# | C# Collection part 15. [online] YouTube. Available at: https://www.youtube.com/watch?v=Ks0dDWNVURc&list=PL_xlJum5pRdDC-SCtuLI0D_m4KJcIsCLq&index=16 [Accessed 2 Oct. 2025].
+
+- Tech With RGenics (2021). C# Dictionary with example | Dictionary in C# | C# Collection Part 6. [online] YouTube. Available at: https://www.youtube.com/watch?v=tx_JNYL0Img&list=PL_xlJum5pRdDC-SCtuLI0D_m4KJcIsCLq&index=6 [Accessed 7 Oct. 2025].
+ *
+ *
+ * 
+ */
+
 // ========================== BST Node ============================== 
 public class BSTNode<T>
 {

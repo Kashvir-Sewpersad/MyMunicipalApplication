@@ -9,6 +9,23 @@ using Microsoft.Extensions.Configuration;
 namespace Programming_7312_Part_1.Services
 {
     
+    
+    
+    
+    //============================================== references ============================================//
+    /*
+     *
+     *
+   
+
+            Brevo.com. (2025). Brevo | Email Marketing Software, Automation & CRM. [online] Available at: https://www.brevo.com/?gad_source=1&gad_campaignid=23086271243&gbraid=0AAAAAp4YiPJM7xOPrXsppAUZnGIAu-LvQ&gclid=Cj0KCQjw6bfHBhDNARIsAIGsqLjfE68ZXXIQRwSdE_GX3qLjhs0mMFeMj1Idn_ShXWA3lIatJ3mTXQQaArjtEALw_wcB [Accessed 11 Oct. 2025].
+         SendGrid. (2024). Email API - Start for Free | SendGrid. [online] Available at: https://sendgrid.com/en-us/solutions/email-api.
+     *
+     *
+     * 
+     */
+    //========================================================================================================//
+    
     /*
      * the follwing class serves to handle email services for the application
      *
