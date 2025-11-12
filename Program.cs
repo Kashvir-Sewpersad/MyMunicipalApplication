@@ -52,27 +52,44 @@ using Programming_7312_Part_1.Services;
 /*
  *
  **************************************************************** AI DECLERATION ****************************************************************
- * I Kashvir Sewpersad, the student , ST10257503,  hereby declare that i have made use of artifical intelligence in the creation of this project 
- * The nature of my usage has primarily been for debugging issues, either logical or syntaxed based, improving functionality, assistance with ui elements (front end) and overall improving the quality of the work i produce 
- * i have also used AI to gain a better understanding of concepts, specifically the data structures and algoryths implemented
- *NOTE : THE UI WAS IMPROVED BY AI SPECIFICALLY FOR ADDING ANIMATIONS
- * NOTE : THE CONTACT -> WHICH IS NOT RELEVANT TO THIS POE, was develped along with AI 
+ * I Kashvir Sewpersad, the student , ST10257503,  hereby declare that I have made use of artificial intelligence in the creation of this project .
+ * The nature of my usage has primarily been for debugging issues, either logical or syntaxes based, improving functionality, assistance with Ui elements (front end) and overall improving the quality of the work I produce .
+ * I have also used AI to gain a better understanding of concepts, specifically the data structures and algorithms implemented,  AI was used heavily to get the email feature working which makes use of API to send email to the user.
+ * I copied the logic from the contact section over to the report issues section to implement the tracking functionality.
+ * I at no stage used AI to do the assignment, however I did use it to help me improve the features and implementation.
+ * Topics were researched prior to implementation and requesting AI assistance. 
  * 
- * below are links to my ai usage
- * https://chatgpt.com/share/68ee7ec7-2df8-8010-ac96-18b83ad84849
- * https://chatgpt.com/share/68ee805a-b258-8010-b34b-a8a98b18cf4b
- * https://chatgpt.com/share/68ee814e-ddfc-8010-b2fa-da3e1cbcbd9f
- * https://chatgpt.com/share/68ee83d0-6d94-8010-995f-c50d8a2bc85b
- *
- * **********************************************************************************************************************************************
- *
- * ------------------------------------------------ current issues --> TO BE FIXED IN PART 3 OR REMOVED IN PART 3 ---------------------------------------------------
- * 
- * ----------------------------------------------- the search event (not required asper poe  ) is not functioning correctly on local events
- * ----------------------------------------------- the images (not required as per poe ) displaying on local events are not static at the moment --> i tried to have it so when a user loggs into the system they can see diffrent events each time, this has colided with the recomendation and i made a mess of it
- * ----------------------------------------------- the admin cannont add an event if the active box is ticked ( not required as per poe )
- * ----------------------------------------------- the recomendation algorythem does not display searched event right on top of the paage, it is displaying correctly, just not at the right position on the page 
- * 
+ *OpenAI. 2025. Chat-GPT (Version 5.0). [Large language model]. Available at:
+https://chatgpt.com/share/68ee7ec7-2df8-8010-ac96-18b83ad84849  [Accessed: 1
+November 2025] 
+ 
+
+OpenAI. 2025. Chat-GPT (Version 5.0). [Large language model]. Available at:
+https://chatgpt.com/share/68ee805a-b258-8010-b34b-a8a98b18cf4b  [Accessed:4  
+November 2025]
+
+OpenAI. 2025. Chat-GPT (Version 5.0). [Large language model]. Available at:
+https://chatgpt.com/share/68ee814e-ddfc-8010-b2fa-da3e1cbcbd9f  [Accessed: 6
+November 2025]
+
+
+
+OpenAI. 2025. Chat-GPT (Version 5.0). [Large language model]. Available at:
+https://chatgpt.com/share/68ee83d0-6d94-8010-995f-c50d8a2bc85b  [Accessed: 8
+November 2025]
+
+OpenAI. 2025. Chat-GPT (Version 5.0). [Large language model]. Available at:
+https://chatgpt.com/share/6911020a-f5b4-8010-9ab0-aa97e036661d  [Accessed: 8 
+November 2025]
+
+OpenAI. 2025. Chat-GPT (Version 5.0). [Large language model]. Available at:
+https://chatgpt.com/share/6911d34e-5ae4-8010-8d54-0fb84fc289e5  [Accessed: 9
+November 2025]
+
+OpenAI. 2025. Chat-GPT (Version 5.0). [Large language model]. Available at:
+https://chatgpt.com/share/6911d3be-08d0-8010-882a-0cda861ab809  [Accessed: 10
+November 2025]
+
  */
 
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@// 
