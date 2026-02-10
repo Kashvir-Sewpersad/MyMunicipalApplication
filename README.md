@@ -1,5 +1,5 @@
 # Municipal Services Web Application  
-**Programming 7312 POE – Final Submission**
+
 
 A **C# ASP.NET MVC** web application for reporting municipal issues, submitting service requests, viewing events/announcements, and managing them via an admin dashboard. Built to meet POE requirements with additional features like email notifications, tracking numbers, and advanced in-memory data structures.
 
@@ -15,7 +15,7 @@ A **C# ASP.NET MVC** web application for reporting municipal issues, submitting 
 - [AI Declaration](#ai-declaration)
 
 ## Project Overview
-This is a full-stack **ASP.NET MVC** web application developed for the Programming 7312 POE (Final Submission). It allows citizens to:
+This is a full-stack **ASP.NET MVC** web application developed for the Programming  POE . It allows citizens to:
 - Report municipal issues / submit service requests
 - Track request status using a unique tracking number
 - View community events and announcements
@@ -137,5 +137,5 @@ ChatGPT conversation links (examples):
 (and others dated Nov 2025)
 
 ---
-Made with 💻 for Programming 7312 – Final POE  
+
 © Kashvir Sewpersad 2025/2026
